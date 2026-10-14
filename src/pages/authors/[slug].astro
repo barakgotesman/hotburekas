@@ -1,9 +1,11 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import { Picture } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Container from '../../components/Container.astro';
 import RecipeGrid from '../../components/RecipeGrid.astro';
+import Button from '../../components/Button.astro';
 import { getAuthors, getPublishedRecipes } from '../../lib/reader';
 import { resolveImage } from '../../lib/images';
 
@@ -18,25 +20,91 @@ export const getStaticPaths = (async () => {
 
 const { author, recipes } = Astro.props;
 const avatar = resolveImage(author.avatar);
+const banner = resolveImage(author.banner);
+// "About" is plain text where a blank line separates paragraphs.
+const aboutParagraphs = (author.about ?? '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
 ---
 
-<BaseLayout title={author.name} description={author.bio} backHref="/recipes/" innerTitle={author.name}>
-  <Container class="space-y-6">
-    <header class="flex items-center gap-4 rounded-2xl bg-surface-container-low p-5 shadow-card lg:p-8">
+<BaseLayout
+  title={author.name}
+  description={author.bio || author.role || undefined}
+  backHref="/recipes/"
+  innerTitle={author.name}
+>
+  <Container class="space-y-8">
+    <header class="overflow-hidden rounded-2xl bg-surface-container-low shadow-card">
+      {/* Optional wide banner; the avatar overlaps its bottom edge */}
       {
-        avatar ? (
-          <Picture src={avatar} alt="" width={80} height={80} formats={['webp']} class="size-20 rounded-full object-cover ring-2 ring-primary-container" />
-        ) : (
-          <span class="flex size-20 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-3xl font-black text-on-primary-fixed">
-            {author.name.slice(0, 1)}
-          </span>
+        banner && (
+          <Picture
+            src={banner}
+            alt={author.bannerAlt ?? ''}
+            widths={[480, 800, 1200, 1600]}
+            sizes="(min-width: 1280px) 1200px, 100vw"
+            formats={['avif', 'webp']}
+            loading="eager"
+            fetchpriority="high"
+            class="h-44 w-full object-cover sm:h-56 lg:h-72"
+          />
         )
       }
-      <div>
-        <h1 class="text-headline-xl">{author.name}</h1>
-        <p class="mt-1 text-on-surface-variant">{author.bio}</p>
+      <div class:list={['flex flex-col gap-4 p-5 lg:flex-row lg:items-start lg:gap-6 lg:p-8', banner && '-mt-10 sm:-mt-12']}>
+        {
+          avatar ? (
+            <Picture
+              src={avatar}
+              alt=""
+              width={96}
+              height={96}
+              formats={['webp']}
+              class="relative size-24 shrink-0 rounded-full object-cover ring-4 ring-surface-container-low"
+            />
+          ) : (
+            <span class="relative flex size-24 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-4xl font-black text-on-primary-fixed ring-4 ring-surface-container-low">
+              {author.name.slice(0, 1)}
+            </span>
+          )
+        }
+        <div class="space-y-2 lg:pt-10">
+          {author.role && (
+            <p class="inline-flex rounded-full bg-secondary-fixed px-3 py-0.5 text-label-sm text-on-secondary-fixed">{author.role}</p>
+          )}
+          <h1 class="text-headline-xl">{author.name}</h1>
+          {author.bio && <p class="text-on-surface-variant">{author.bio}</p>}
+          {
+            author.instagram && (
+              <Button href={author.instagram} variant="secondary" size="sm" class="mt-1" rel="noopener noreferrer" target="_blank">
+                <Icon name="material-symbols:link" class="size-4" aria-hidden="true" />
+                אינסטגרם
+              </Button>
+            )
+          }
+        </div>
       </div>
     </header>
-    <RecipeGrid recipes={recipes} />
+
+    {
+      (author.quote || aboutParagraphs.length > 0) && (
+        <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:items-start">
+          <div class="space-y-3 rounded-2xl bg-surface-container p-5 lg:p-8">
+            <h2 class="text-headline-sm">קצת עליו</h2>
+            {aboutParagraphs.map((p) => <p class="leading-relaxed">{p}</p>)}
+          </div>
+          {
+            author.quote && (
+              <blockquote class="flex rotate-[-0.8deg] items-start gap-3 rounded-2xl bg-primary-fixed p-5 text-on-primary-fixed-variant shadow-card">
+                <Icon name="material-symbols:format-quote" class="size-8 shrink-0 text-secondary" aria-hidden="true" />
+                <p class="text-headline-sm font-medium">{author.quote}</p>
+              </blockquote>
+            )
+          }
+        </section>
+      )
+    }
+
+    <section class="space-y-4">
+      <h2 class="text-headline-lg">המתכונים של {author.name}</h2>
+      <RecipeGrid recipes={recipes} />
+    </section>
   </Container>
 </BaseLayout>
