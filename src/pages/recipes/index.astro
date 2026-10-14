@@ -1,0 +1,94 @@
+---
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import RecipeCard from '../../components/RecipeCard.astro';
+import { getPublishedRecipes } from '../../lib/reader';
+import { kashrutOptions, difficultyOptions, heatInfo } from '../../lib/labels';
+
+const recipes = await getPublishedRecipes();
+
+// Pressed chips use aria-pressed so one class list covers both states.
+const chip =
+  'shrink-0 rounded-full bg-surface-container px-3.5 py-2 text-label-md text-on-surface shadow-soft transition active:scale-95 aria-pressed:bg-primary-container aria-pressed:text-on-primary-container';
+---
+
+<BaseLayout
+  title="כל המתכונים"
+  description="כל מתכוני הבורקס: משולשים, שבלולים, סו בורק ועוד. סננו לפי כשרות, מד חום וזמן."
+  backHref="/"
+  innerTitle="כל המתכונים"
+>
+  {/* Sticky search + filters. Interactive parts need JS, so they're hidden until the script runs. */}
+  <section class="sticky top-16 z-30 bg-surface/95 pb-3 pt-1 backdrop-blur-md lg:top-20" data-print-hide>
+    <Container>
+      <h1 class="sr-only">כל המתכונים</h1>
+      <div class="relative flex items-center rounded-xl bg-surface-container-low shadow-card focus-within:bg-surface-container-lowest">
+        <Icon name="material-symbols:search" class="pointer-events-none absolute start-3.5 size-6 text-primary" aria-hidden="true" />
+        <input
+          id="recipe-search"
+          type="search"
+          placeholder="חיפוש לפי מילוי, סוג בצק, או שם..."
+          aria-label="חיפוש מתכונים"
+          class="min-h-12 w-full bg-transparent py-3 ps-12 pe-3 text-base placeholder:text-on-surface-variant/70 focus:outline-none"
+        />
+      </div>
+
+      <div class="-mx-5 mt-3 flex items-center gap-2 overflow-x-auto px-5 pb-1.5 lg:mx-0 lg:flex-wrap lg:px-0">
+        <span class="shrink-0 text-label-sm font-bold text-on-surface-variant">כשרות:</span>
+        {
+          kashrutOptions.map((o) => (
+            <button type="button" data-filter="kashrut" data-value={o.value} aria-pressed="false" class={chip}>
+              {o.label}
+            </button>
+          ))
+        }
+        <span class="shrink-0 ps-2 text-label-sm font-bold text-on-surface-variant">מד חום:</span>
+        {
+          difficultyOptions.map((o) => (
+            <button type="button" data-filter="heat" data-value={o.value} aria-pressed="false" class={chip}>
+              {heatInfo[o.value].name} {heatInfo[o.value].flames}
+            </button>
+          ))
+        }
+        <button type="button" data-filter="quick" aria-pressed="false" class={chip}>⏱️ עד 30 דק׳</button>
+      </div>
+    </Container>
+  </section>
+
+  <Container class="pt-4">
+    <div class="flex items-center justify-between gap-3 px-1 pb-3">
+      <p class="flex items-center gap-1.5 text-headline-sm font-black">
+        <span class="size-2 animate-pulse rounded-full bg-secondary" aria-hidden="true"></span>
+        <span id="recipe-count" aria-live="polite">{recipes.length} מתכונים פריכים</span>
+      </p>
+      <label class="flex items-center gap-1.5 text-label-md">
+        <span class="sr-only">מיון</span>
+        <select id="recipe-sort" class="min-h-11 rounded-lg bg-surface-container-high px-3 text-label-md">
+          <option value="new">הכי חדש 🔥</option>
+          <option value="time">הכי מהיר בתנור ⚡</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {recipes.map((recipe, i) => <RecipeCard recipe={recipe} index={i} eager={i < 2} />)}
+    </div>
+
+    <div id="recipe-empty" hidden class="mt-10 rounded-2xl bg-surface-container p-6 text-center">
+      <p class="text-headline-sm">הבורקס הזה עוד לא יצא מהתנור</p>
+      <p class="mt-1 text-on-surface-variant">לא נמצאו מתכונים. נסו חיפוש אחר או נקו את הסינון.</p>
+      <button
+        id="recipe-clear"
+        type="button"
+        class="mt-4 min-h-11 rounded-xl bg-primary-container px-4 text-label-lg text-on-primary-container"
+      >
+        נקו סינון
+      </button>
+    </div>
+  </Container>
+</BaseLayout>
+
+<script>
+  import '../../scripts/recipe-filter';
+</script>

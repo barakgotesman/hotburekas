@@ -1,0 +1,21 @@
+---
+import { Icon } from 'astro-icon/components';
+import { kashrutInfo, kashrutLabels } from '../lib/labels';
+
+interface Props {
+  kashrut: string;
+  class?: string;
+}
+const { kashrut, class: className = '' } = Astro.props;
+---
+
+<span
+  class:list={[
+    'inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-label-sm shadow-soft',
+    kashrutInfo[kashrut]?.classes,
+    className,
+  ]}
+>
+  <Icon name="material-symbols:verified" class="size-4" aria-hidden="true" />
+  {kashrutLabels[kashrut] ?? kashrut}
+</span>

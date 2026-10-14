@@ -1,0 +1,27 @@
+---
+// Small angled "taped label" pinned to a corner of a card (baking time, "recommended", ...).
+interface Props {
+  tone?: 'paper' | 'heat' | 'crust';
+  rotate?: 'left' | 'right';
+  class?: string;
+}
+const { tone = 'paper', rotate = 'left', class: className = '' } = Astro.props;
+
+const tones = {
+  paper: 'bg-surface-container-highest text-on-surface-variant',
+  heat: 'bg-secondary text-on-secondary',
+  crust: 'bg-primary-container text-on-primary-container',
+};
+const rotations = { left: '-rotate-3', right: 'rotate-2' };
+---
+
+<span
+  class:list={[
+    'inline-flex items-center gap-1 rounded px-3 py-1 text-label-sm shadow-soft',
+    tones[tone],
+    rotations[rotate],
+    className,
+  ]}
+>
+  <slot />
+</span>

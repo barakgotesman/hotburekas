@@ -1,0 +1,63 @@
+---
+import { groupOptions, groupDot, unitLabels } from '../lib/labels';
+import { parseAmount } from '../lib/amount';
+
+interface Ingredient {
+  group: string;
+  amount: string | null;
+  unit: string;
+  name: string;
+  note: string | null;
+}
+interface Props {
+  ingredients: readonly Ingredient[];
+  /** Used to namespace checkbox ids. */
+  slug: string;
+}
+const { ingredients, slug } = Astro.props;
+
+// Keep the group order from labels.ts and skip empty groups.
+const groups = groupOptions
+  .map((g) => ({ ...g, items: ingredients.filter((i) => i.group === g.value) }))
+  .filter((g) => g.items.length);
+---
+
+<div class="space-y-5">
+  {
+    groups.map((group) => (
+      <section class="space-y-2">
+        <h3 class="flex items-center gap-1.5 text-label-md font-bold text-on-surface-variant">
+          <span class:list={['inline-block size-2 rounded-full', groupDot[group.value]]} aria-hidden="true" />
+          {group.label}:
+        </h3>
+        <ul class="space-y-1.5">
+          {group.items.map((item, i) => {
+            const base = parseAmount(item.amount);
+            return (
+              <li>
+                <label class="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl bg-surface-container p-2.5 transition hover:bg-surface-container-high has-checked:text-on-surface-variant has-checked:line-through">
+                  <input
+                    type="checkbox"
+                    data-ingredient-check
+                    id={`${slug}-${group.value}-${i}`}
+                    class="size-5 shrink-0 cursor-pointer accent-primary"
+                  />
+                  <span class="flex-1">
+                    {item.amount && (
+                      // data-base = the amount for the recipe's default servings; the scaler multiplies it.
+                      <bdi data-qty data-base={base ?? undefined} class="font-bold">
+                        {item.amount}
+                      </bdi>
+                    )}{' '}
+                    {item.unit !== 'none' && unitLabels[item.unit]} {item.name}
+                    {item.note && <span class="text-label-md text-on-surface-variant"> ({item.note})</span>}
+                  </span>
+                </label>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))
+  }
+</div>

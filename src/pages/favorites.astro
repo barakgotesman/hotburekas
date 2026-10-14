@@ -1,0 +1,50 @@
+---
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import RecipeCard from '../components/RecipeCard.astro';
+import Button from '../components/Button.astro';
+import { getPublishedRecipes } from '../lib/reader';
+
+// The page is static: every card is rendered hidden and the script reveals the saved ones.
+const recipes = await getPublishedRecipes();
+---
+
+<BaseLayout title="המועדפים שלי" description="המתכונים ששמרתם." backHref="/" innerTitle="המועדפים שלי">
+  <Container class="space-y-6">
+    <h1 class="text-headline-xl">המועדפים שלי</h1>
+    <p class="text-on-surface-variant">המתכונים נשמרים בדפדפן הזה בלבד.</p>
+
+    <div id="fav-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {recipes.map((recipe, i) => <div data-fav-item={recipe.slug} hidden><RecipeCard recipe={recipe} index={i} /></div>)}
+    </div>
+
+    <div id="fav-empty" hidden class="rounded-2xl bg-surface-container p-6 text-center">
+      <Icon name="material-symbols:local-fire-department-outline" class="mx-auto size-10 text-secondary" aria-hidden="true" />
+      <p class="mt-2 text-headline-sm">עוד לא שמרתם שום מגש</p>
+      <p class="mt-1 text-on-surface-variant">לחצו על הלהבה בכרטיס מתכון כדי לשמור אותו כאן.</p>
+      <Button href="/recipes/" variant="crust" class="mt-4">לכל המתכונים</Button>
+    </div>
+    <noscript><p class="rounded-2xl bg-surface-container p-6 text-center">המועדפים דורשים JavaScript.</p></noscript>
+  </Container>
+</BaseLayout>
+
+<script>
+  import { readFavorites } from '../scripts/favorites';
+
+  /** Shows only the saved recipes (and the empty state when there are none). */
+  function render() {
+    const saved = new Set(readFavorites());
+    let shown = 0;
+    document.querySelectorAll<HTMLElement>('[data-fav-item]').forEach((item) => {
+      const show = saved.has(item.dataset.favItem ?? '');
+      item.hidden = !show;
+      if (show) shown++;
+    });
+    document.querySelector<HTMLElement>('#fav-empty')!.hidden = shown > 0;
+  }
+
+  render();
+  // Un-favoriting on this page removes the card immediately.
+  document.addEventListener('burekas:favorites-changed', render);
+</script>

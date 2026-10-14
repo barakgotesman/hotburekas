@@ -1,0 +1,23 @@
+---
+// Responsive recipe grid (1 column on phones, 2 on tablets, 3 on desktop) shared by list-like pages.
+import RecipeCard from './RecipeCard.astro';
+import type { RecipeItem } from '../lib/reader';
+
+interface Props {
+  recipes: RecipeItem[];
+  emptyText?: string;
+}
+const { recipes, emptyText = 'עדיין אין כאן מתכונים. המגש הבא בדרך!' } = Astro.props;
+---
+
+{
+  recipes.length ? (
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {recipes.map((recipe, i) => (
+        <RecipeCard recipe={recipe} index={i} eager={i < 2} />
+      ))}
+    </div>
+  ) : (
+    <p class="rounded-2xl bg-surface-container p-6 text-center text-on-surface-variant">{emptyText}</p>
+  )
+}

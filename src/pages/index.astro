@@ -1,0 +1,197 @@
+---
+import { Picture } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import TiltCard from '../components/TiltCard.astro';
+import Sticker from '../components/Sticker.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import RecipeCard from '../components/RecipeCard.astro';
+import KashrutBadge from '../components/KashrutBadge.astro';
+import HeatBadge from '../components/HeatBadge.astro';
+import Button from '../components/Button.astro';
+import { getCategories, getPublishedRecipes, getSettings } from '../lib/reader';
+import { resolveImage } from '../lib/images';
+import { formatMinutes } from '../lib/format';
+
+const [settings, categories, recipes] = await Promise.all([getSettings(), getCategories(), getPublishedRecipes()]);
+const heroImage = resolveImage(settings.heroImage);
+// Recipe of the week: the one picked in settings, falling back to the newest recipe.
+const featured = recipes.find((r) => r.slug === settings.featuredRecipe) ?? recipes[0];
+const trending = recipes.slice(0, 4);
+---
+
+<BaseLayout>
+  <Container class="space-y-8">
+    {/* 1. Live ticker */}
+    {
+      settings.tickerText && (
+        <div class="flex items-center justify-between gap-2 rounded-xl bg-secondary p-2 text-on-secondary shadow-card">
+          <p class="flex min-w-0 items-center gap-2 text-label-md">
+            <span class="relative flex size-3 shrink-0" aria-hidden="true">
+              <span class="absolute inline-flex size-full animate-ping rounded-full bg-surface opacity-75" />
+              <span class="relative inline-flex size-3 rounded-full bg-primary-container" />
+            </span>
+            <span class="truncate">{settings.tickerText}</span>
+          </p>
+          <span class="shrink-0 rounded-full bg-on-secondary px-2 py-0.5 text-label-sm text-secondary">לוהט 🔥</span>
+        </div>
+      )
+    }
+
+    {/* 2. Hero: text + search, image beside it on desktop */}
+    <section class="relative overflow-hidden rounded-2xl bg-surface-container-low p-4 shadow-card lg:grid lg:grid-cols-2 lg:items-center lg:gap-10 lg:p-10">
+      {
+        settings.heroStamp && (
+          <Sticker tone="crust" class="absolute -start-2 top-2 z-10 -rotate-12 !rounded-lg bg-secondary-container !text-on-secondary-container">
+            <Icon name="material-symbols:local-fire-department" class="size-3.5" aria-hidden="true" />
+            {settings.heroStamp}
+          </Sticker>
+        )
+      }
+      <div class="pt-2">
+        <h1 class="text-display tracking-tight">
+          {settings.heroTitle}<br />
+          <span class="text-secondary">{settings.heroHighlight}</span>
+        </h1>
+        <p class="mt-2 max-w-[92%] text-on-surface-variant">{settings.heroText}</p>
+
+        <form action="/recipes/" method="get" role="search" class="relative mt-5 flex items-center">
+          <Icon name="material-symbols:skillet-outline" class="pointer-events-none absolute start-3 size-5 text-on-surface-variant" aria-hidden="true" />
+          <input
+            type="search"
+            name="q"
+            aria-label="חיפוש מתכון"
+            placeholder="מה בא לכם לאפות היום? (קשקבל, תפו״א, מים...)"
+            class="min-h-12 w-full rounded-xl bg-surface-container-lowest py-3 ps-10 pe-24 text-base shadow-inner placeholder:text-on-surface-variant/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-container"
+          />
+          <button
+            type="submit"
+            class="absolute end-1.5 flex min-h-10 items-center gap-1 rounded-lg bg-primary-container px-3 text-label-md text-on-primary-container shadow-soft transition hover:bg-secondary-container"
+          >
+            רידוד
+            <Icon name="material-symbols:arrow-back" class="size-4" aria-hidden="true" />
+          </button>
+        </form>
+      </div>
+
+      {
+        heroImage && (
+          <div class="relative mt-4 overflow-hidden rounded-xl bg-surface-container shadow-card lg:mt-0">
+            <Picture
+              src={heroImage}
+              alt={settings.heroImageAlt ?? ''}
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              formats={['avif', 'webp']}
+              loading="eager"
+              fetchpriority="high"
+              class="aspect-[4/3] w-full object-cover"
+            />
+            <div class="absolute bottom-2 end-2 flex items-center gap-1.5 rounded-lg bg-surface/90 px-2.5 py-1 text-label-sm backdrop-blur-md">
+              <Icon name="material-symbols:air" class="size-4 text-secondary" aria-hidden="true" />
+              בצק עלים ביתי מרודד
+            </div>
+          </div>
+        )
+      }
+    </section>
+
+    {/* 3. Category chips: scroll sideways on mobile, wrap on desktop */}
+    <section aria-labelledby="cats-heading">
+      <div class="mb-2 flex items-center justify-between px-1">
+        <h2 id="cats-heading" class="flex items-center gap-1.5 text-headline-sm">
+          <Icon name="material-symbols:storefront-outline" class="size-6 text-secondary" aria-hidden="true" />
+          בחרו סגנון למגש
+        </h2>
+        <span class="text-label-sm text-on-surface-variant">הכל בעבודת יד</span>
+      </div>
+      <ul class="-mx-5 flex gap-2.5 overflow-x-auto px-5 pb-2 pt-1 lg:mx-0 lg:flex-wrap lg:px-0">
+        {
+          categories.map((cat, i) => (
+            <li class="shrink-0">
+              <a
+                href={`/categories/${cat.slug}/`}
+                class:list={[
+                  'flex min-h-11 items-center gap-1.5 rounded-xl px-3.5 py-2 text-label-md shadow-soft transition hover:-translate-y-0.5 active:scale-95',
+                  i === 2 ? 'bg-primary-container text-on-primary-container' : i % 2 ? 'bg-surface-container-lowest' : 'bg-surface-container-high',
+                ]}
+              >
+                <span aria-hidden="true">{cat.entry.emoji}</span>
+                {cat.entry.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {/* 4. Recipe of the week */}
+    {
+      featured && (
+        <section aria-labelledby="featured-heading">
+          <div class="mb-2 flex items-center justify-between px-1">
+            <h2 id="featured-heading" class="flex items-center gap-1.5 text-headline-sm">
+              <Icon name="material-symbols:award-star-outline" class="size-6 text-primary" aria-hidden="true" />
+              מתכון השבוע
+            </h2>
+            <span class="rounded-full bg-secondary px-2 py-0.5 text-label-sm text-on-secondary">סודי ביותר</span>
+          </div>
+          <TiltCard class="space-y-3 bg-surface-container p-4 lg:p-8" index={0}>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <KashrutBadge kashrut={featured.entry.kashrut} />
+              <HeatBadge difficulty={featured.entry.difficulty} />
+            </div>
+            <h3 class="text-headline-lg font-extrabold">{featured.entry.title}</h3>
+            <p class="text-on-surface-variant">{featured.entry.summary}</p>
+            {featured.entry.chefTip && (
+              <blockquote class="flex items-start gap-2.5 rounded-xl bg-surface-container-high p-2.5">
+                <Icon name="material-symbols:format-quote" class="mt-0.5 size-6 shrink-0 text-secondary" aria-hidden="true" />
+                <p class="text-label-md font-medium italic">״{featured.entry.chefTip}״</p>
+              </blockquote>
+            )}
+            <dl class="grid grid-cols-2 gap-2 rounded-xl bg-surface-container-low p-2.5">
+              <div class="flex items-center gap-2">
+                <Icon name="material-symbols:timer-outline" class="size-8 rounded-lg bg-surface p-1.5 text-primary" aria-hidden="true" />
+                <div>
+                  <dt class="text-label-sm text-on-surface-variant">זמן בתנור</dt>
+                  <dd class="text-label-md">{formatMinutes(featured.entry.cookMinutes)}</dd>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <Icon name="material-symbols:room-service-outline" class="size-8 rounded-lg bg-surface p-1.5 text-primary" aria-hidden="true" />
+                <div>
+                  <dt class="text-label-sm text-on-surface-variant">כמות במגש</dt>
+                  <dd class="text-label-md">{featured.entry.servings} יחידות</dd>
+                </div>
+              </div>
+            </dl>
+            <Button href={`/recipes/${featured.slug}/`} variant="primary" class="w-full">
+              <Icon name="material-symbols:restaurant-menu" class="size-5" aria-hidden="true" />
+              פתח מתכון מלא ומדריך שכבות
+            </Button>
+          </TiltCard>
+        </section>
+      )
+    }
+
+    {/* 5. Trending */}
+    <section>
+      <SectionHeading title="הכי לוהטים השבוע" icon="material-symbols:whatshot-outline" linkHref="/recipes/" linkText="לכל המגשים" />
+      <div class="grid gap-6 pt-1 sm:grid-cols-2 lg:grid-cols-4">
+        {trending.map((recipe, i) => <RecipeCard recipe={recipe} index={i} />)}
+      </div>
+    </section>
+
+    {/* 6. Follow banner (RSS: no accounts or newsletter backend on this site) */}
+    <section class="rounded-2xl bg-surface-container-high p-4 text-center shadow-card">
+      <Icon name="material-symbols:bakery-dining-outline" class="mx-auto size-8 text-primary" aria-hidden="true" />
+      <h2 class="mt-1 text-headline-sm font-black">{settings.footerText}</h2>
+      <p class="mx-auto mt-1 max-w-sm text-label-md text-on-surface-variant">רוצים לדעת מתי יוצא מגש חדש? עקבו אחרי הפיד.</p>
+      <Button href="/rss.xml" variant="heat" class="mt-4 w-full sm:w-auto">
+        <Icon name="material-symbols:rss-feed" class="size-5" aria-hidden="true" />
+        עקבו אחרי המגשים החדשים
+      </Button>
+    </section>
+  </Container>
+</BaseLayout>

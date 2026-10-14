@@ -1,0 +1,244 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Picture, getImage } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import IngredientList from '../../components/IngredientList.astro';
+import KashrutBadge from '../../components/KashrutBadge.astro';
+import Sticker from '../../components/Sticker.astro';
+import { getPublishedRecipes, reader, renderSteps } from '../../lib/reader';
+import { resolveImage } from '../../lib/images';
+import { formatMinutes, isoDuration } from '../../lib/format';
+import { heatInfo, kashrutLabels, tagLabels, unitLabels } from '../../lib/labels';
+
+/** One static page per published recipe (drafts are excluded by getPublishedRecipes). */
+export const getStaticPaths = (async () => {
+  const recipes = await getPublishedRecipes();
+  return recipes.map((recipe) => ({ params: { slug: recipe.slug }, props: { recipe } }));
+}) satisfies GetStaticPaths;
+
+const { recipe } = Astro.props;
+const { slug, entry } = recipe;
+
+const stepsHtml = await renderSteps(slug);
+// Relationships are stored as slugs; resolve them to the full entries.
+const category = entry.category ? await reader.collections.categories.read(entry.category) : null;
+const author = entry.author ? await reader.collections.authors.read(entry.author) : null;
+const authorAvatar = resolveImage(author?.avatar);
+
+const cover = resolveImage(entry.cover);
+const shareImage = cover ? (await getImage({ src: cover, width: 1200, height: 630, format: 'jpeg', fit: 'cover' })).src : undefined;
+const heat = heatInfo[entry.difficulty] ?? heatInfo.easy;
+
+const tiles = [
+  { label: 'מד חום וקושי', value: `${heat.name} ${heat.flames}`, icon: 'material-symbols:local-fire-department', tone: 'bg-secondary-container text-on-secondary-container' },
+  { label: 'כשרות', value: kashrutLabels[entry.kashrut], icon: 'material-symbols:workspace-premium', tone: 'bg-tertiary-container text-on-tertiary-container' },
+  { label: 'זמן אפייה', value: formatMinutes(entry.cookMinutes), icon: 'material-symbols:timer-outline', tone: 'bg-primary-container text-on-primary-container' },
+  { label: 'זמן הכנה', value: formatMinutes(entry.prepMinutes), icon: 'material-symbols:countertops-outline', tone: 'bg-surface-container-highest text-on-surface' },
+];
+
+// Structured data so search engines can show rich recipe results.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Recipe',
+  name: entry.title,
+  description: entry.summary,
+  image: shareImage ? [new URL(shareImage, Astro.site).href] : undefined,
+  author: author ? { '@type': 'Person', name: author.name } : undefined,
+  datePublished: entry.publishedAt,
+  prepTime: isoDuration(entry.prepMinutes),
+  cookTime: isoDuration(entry.cookMinutes),
+  totalTime: isoDuration(entry.prepMinutes + entry.cookMinutes),
+  recipeYield: `${entry.servings} יחידות`,
+  recipeCategory: category?.name,
+  keywords: entry.tags.map((t) => tagLabels[t]).join(', ') || undefined,
+  recipeIngredient: entry.ingredients.map((i) =>
+    [i.amount, i.unit !== 'none' ? unitLabels[i.unit] : '', i.name].filter(Boolean).join(' '),
+  ),
+};
+
+const actionBtn =
+  'flex size-11 items-center justify-center rounded-xl bg-surface-container-lowest text-on-surface shadow-soft transition active:scale-95';
+---
+
+<BaseLayout
+  title={entry.title}
+  description={entry.summary}
+  image={shareImage}
+  type="article"
+  jsonLd={jsonLd}
+  backHref="/recipes/"
+  innerTitle={entry.title}
+>
+  <Container class="space-y-5 pb-6">
+    <span hidden data-recipe-slug={slug}></span>
+
+    {/* Title + cover: stacked on mobile, side by side on desktop */}
+    <div class="space-y-5 lg:grid lg:grid-cols-2 lg:items-center lg:gap-8 lg:space-y-0">
+      <div class="space-y-3 rounded-2xl bg-surface-container-low p-4 shadow-card lg:p-8">
+        <div class="flex flex-wrap items-center gap-2">
+          {
+            category && (
+              <a
+                href={`/categories/${entry.category}/`}
+                class="inline-flex min-h-8 items-center rounded-full bg-secondary-fixed px-3 text-label-sm text-on-secondary-fixed"
+              >
+                {category.emoji} {category.name}
+              </a>
+            )
+          }
+          <KashrutBadge kashrut={entry.kashrut} />
+        </div>
+        <h1 class="text-headline-xl">{entry.title}</h1>
+        <p class="text-on-surface-variant">{entry.summary}</p>
+        {
+          author && (
+            <a href={`/authors/${entry.author}/`} class="flex items-center gap-2 text-label-md text-on-surface-variant">
+              {authorAvatar ? (
+                <Picture src={authorAvatar} alt="" width={32} height={32} formats={['webp']} class="size-8 rounded-full object-cover" />
+              ) : (
+                <span class="flex size-8 items-center justify-center rounded-full bg-primary-fixed text-label-sm text-on-primary-fixed">
+                  {author.name.slice(0, 1)}
+                </span>
+              )}
+              מאת {author.name}
+            </a>
+          )
+        }
+        <div class="flex items-center gap-2 pt-1" data-print-hide>
+          <button type="button" data-fav={slug} aria-pressed="false" aria-label="שמירה למועדפים" class={`group/fav ${actionBtn} aria-pressed:text-secondary`}>
+            <Icon name="material-symbols:local-fire-department-outline" class="size-6 group-aria-pressed/fav:hidden" aria-hidden="true" />
+            <Icon name="material-symbols:local-fire-department" class="hidden size-6 group-aria-pressed/fav:block" aria-hidden="true" />
+          </button>
+          <button type="button" data-share hidden aria-label="שיתוף מתכון" class={actionBtn}>
+            <Icon name="material-symbols:share-outline" class="size-6" aria-hidden="true" />
+          </button>
+          <button type="button" data-print aria-label="הדפסת המתכון" class={`${actionBtn} hidden sm:flex`}>
+            <Icon name="material-symbols:print-outline" class="size-6" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+
+      <div class="relative overflow-hidden rounded-2xl bg-surface-container-high shadow-card">
+        {
+          cover && (
+            <Picture
+              src={cover}
+              alt={entry.coverAlt}
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              formats={['avif', 'webp']}
+              loading="eager"
+              fetchpriority="high"
+              class="h-72 w-full object-cover lg:h-96"
+            />
+          )
+        }
+        <div class="absolute inset-0 bg-gradient-to-t from-on-surface/70 via-transparent to-black/10"></div>
+        <Sticker tone="crust" class="absolute bottom-3 start-3 -rotate-1 !px-3.5 !py-1.5">
+          <Icon name="material-symbols:verified" class="size-[18px]" aria-hidden="true" />
+          {entry.servings} יח׳ במגש
+        </Sticker>
+      </div>
+    </div>
+
+    {/* Meta tiles */}
+    <ul class="grid grid-cols-2 gap-2 lg:grid-cols-4">
+      {
+        tiles.map((t) => (
+          <li class="flex items-center gap-2 rounded-xl bg-surface-container p-2.5 shadow-soft">
+            <span class:list={['flex size-9 shrink-0 items-center justify-center rounded-lg', t.tone]}>
+              <Icon name={t.icon} class="size-5" aria-hidden="true" />
+            </span>
+            <div class="min-w-0">
+              <p class="text-label-sm text-on-surface-variant">{t.label}</p>
+              <p class="truncate text-label-md">{t.value}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    {/* Cook mode */}
+    <button
+      type="button"
+      data-cook-toggle
+      aria-pressed="false"
+      data-print-hide
+      class="group flex w-full items-center justify-between rounded-2xl bg-primary-container p-4 text-start text-on-primary-container shadow-card transition hover:bg-secondary-container active:scale-[0.98] aria-pressed:bg-secondary aria-pressed:text-on-secondary"
+    >
+      <span class="flex items-center gap-3">
+        <span class="flex size-12 items-center justify-center rounded-xl bg-surface-container-lowest text-primary">
+          <Icon name="material-symbols:soup-kitchen-outline" class="size-7" aria-hidden="true" />
+        </span>
+        <span>
+          <span class="block text-label-lg group-aria-pressed:hidden">כניסה למצב בישול</span>
+          <span class="hidden text-label-lg group-aria-pressed:block">יציאה ממצב בישול</span>
+          <span class="block text-label-md font-normal opacity-90">טקסט גדול והמסך נשאר דלוק בזמן האפייה</span>
+        </span>
+      </span>
+      <Icon name="material-symbols:chevron-left" class="size-6" aria-hidden="true" />
+    </button>
+
+    {/* Ingredients (sticky side column on desktop) + steps */}
+    <div class="space-y-5 lg:grid lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-8 lg:space-y-0">
+      <section
+        aria-labelledby="ingredients-heading"
+        data-servings-root
+        data-servings-base={entry.servings}
+        class="space-y-4 rounded-2xl bg-surface-container-low p-4 shadow-card lg:sticky lg:top-24"
+      >
+        <div class="flex items-center justify-between gap-2">
+          <h2 id="ingredients-heading" class="flex items-center gap-2 text-headline-sm">
+            <Icon name="material-symbols:shopping-basket-outline" class="size-6 text-secondary" aria-hidden="true" />
+            מצרכים למגש לוהט
+          </h2>
+          <div data-servings-stepper hidden class="flex items-center rounded-xl bg-surface-container p-1 shadow-soft" data-print-hide>
+            <button type="button" data-servings-step="-1" aria-label="פחות יחידות" class="flex size-9 items-center justify-center rounded-lg bg-surface-container-lowest text-lg font-bold active:bg-primary-container">−</button>
+            <span data-servings-value aria-live="polite" class="min-w-14 px-2 text-center text-label-md">{entry.servings} יח׳</span>
+            <button type="button" data-servings-step="1" aria-label="יותר יחידות" class="flex size-9 items-center justify-center rounded-lg bg-surface-container-lowest text-lg font-bold active:bg-primary-container">+</button>
+          </div>
+        </div>
+        <p class="text-label-md text-on-surface-variant" data-print-hide>סמנו את המצרכים שכבר הנחתם על השיש:</p>
+        <IngredientList ingredients={entry.ingredients} slug={slug} />
+      </section>
+
+      <section aria-labelledby="steps-heading" class="space-y-4">
+        <h2 id="steps-heading" class="flex items-center gap-2 px-1 text-headline-sm">
+          <Icon name="material-symbols:skillet-outline" class="size-6 text-primary" aria-hidden="true" />
+          אופן ההכנה צעד אחר צעד
+        </h2>
+        <div class="steps" set:html={stepsHtml} />
+        {
+          entry.chefTip && (
+            <aside class="tip">
+              <strong class="tip-title">טיפ מהשף</strong>
+              <p>{entry.chefTip}</p>
+            </aside>
+          )
+        }
+        {
+          entry.tags.length > 0 && (
+            <ul class="flex flex-wrap gap-2 pt-2" data-print-hide>
+              {entry.tags.map((tag) => (
+                <li>
+                  <a href={`/tags/${tag}/`} class="inline-flex min-h-9 items-center rounded-full bg-surface-container px-3 text-label-md">
+                    #{tagLabels[tag]}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </section>
+    </div>
+  </Container>
+</BaseLayout>
+
+<script>
+  import '../../scripts/servings';
+  import '../../scripts/ingredient-checks';
+  import '../../scripts/cook-mode';
+  import '../../scripts/recipe-page';
+</script>

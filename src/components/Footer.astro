@@ -1,0 +1,19 @@
+---
+import Container from './Container.astro';
+
+interface Props {
+  siteTitle: string;
+  footerText?: string;
+}
+const { siteTitle, footerText } = Astro.props;
+---
+
+<footer class="mt-10 pb-28 pt-6 lg:pb-6 text-center text-on-surface-variant" data-print-hide>
+  <Container>
+    <p class="text-label-md">{footerText}</p>
+    <p class="mt-1 text-label-sm">
+      {siteTitle} •
+      <a href="/rss.xml" class="underline underline-offset-2">RSS</a>
+    </p>
+  </Container>
+</footer>

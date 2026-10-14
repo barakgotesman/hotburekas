@@ -1,0 +1,11 @@
+---
+// Centered page width with the 1.25rem mobile gutter from design.md.
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['mx-auto w-full max-w-7xl px-5 lg:px-6', className]}>
+  <slot />
+</div>

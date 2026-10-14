@@ -1,0 +1,28 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  title: string;
+  icon?: string;
+  /** Optional link shown on the opposite side, e.g. "לכל המגשים". */
+  linkHref?: string;
+  linkText?: string;
+}
+const { title, icon, linkHref, linkText } = Astro.props;
+---
+
+<div class="mb-2 flex items-center justify-between gap-3 px-1">
+  <h2 class="flex items-center gap-1.5 text-headline-sm text-on-surface">
+    {icon && <Icon name={icon} class="size-6 text-secondary" aria-hidden="true" />}
+    {title}
+  </h2>
+  {
+    linkHref && (
+      <a href={linkHref} class="flex min-h-11 items-center gap-0.5 text-label-md font-bold text-primary">
+        {linkText}
+        {/* "forward" in RTL points to the left, which is chevron-left */}
+        <Icon name="material-symbols:chevron-left" class="size-4" aria-hidden="true" />
+      </a>
+    )
+  }
+</div>

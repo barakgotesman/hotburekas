@@ -1,0 +1,42 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Picture } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import RecipeGrid from '../../components/RecipeGrid.astro';
+import { getAuthors, getPublishedRecipes } from '../../lib/reader';
+import { resolveImage } from '../../lib/images';
+
+/** One page per author, listing their published recipes. */
+export const getStaticPaths = (async () => {
+  const [authors, recipes] = await Promise.all([getAuthors(), getPublishedRecipes()]);
+  return authors.map((a) => ({
+    params: { slug: a.slug },
+    props: { author: a.entry, recipes: recipes.filter((r) => r.entry.author === a.slug) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { author, recipes } = Astro.props;
+const avatar = resolveImage(author.avatar);
+---
+
+<BaseLayout title={author.name} description={author.bio} backHref="/recipes/" innerTitle={author.name}>
+  <Container class="space-y-6">
+    <header class="flex items-center gap-4 rounded-2xl bg-surface-container-low p-5 shadow-card lg:p-8">
+      {
+        avatar ? (
+          <Picture src={avatar} alt="" width={80} height={80} formats={['webp']} class="size-20 rounded-full object-cover ring-2 ring-primary-container" />
+        ) : (
+          <span class="flex size-20 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-3xl font-black text-on-primary-fixed">
+            {author.name.slice(0, 1)}
+          </span>
+        )
+      }
+      <div>
+        <h1 class="text-headline-xl">{author.name}</h1>
+        <p class="mt-1 text-on-surface-variant">{author.bio}</p>
+      </div>
+    </header>
+    <RecipeGrid recipes={recipes} />
+  </Container>
+</BaseLayout>

@@ -1,0 +1,27 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import RecipeGrid from '../../components/RecipeGrid.astro';
+import { getPublishedRecipes } from '../../lib/reader';
+import { tagOptions, tagLabels } from '../../lib/labels';
+
+/** One page per tag that at least one published recipe uses. */
+export const getStaticPaths = (async () => {
+  const recipes = await getPublishedRecipes();
+  return tagOptions
+    .map((t) => ({ params: { tag: t.value }, props: { recipes: recipes.filter((r) => r.entry.tags.includes(t.value)) } }))
+    .filter((p) => p.props.recipes.length);
+}) satisfies GetStaticPaths;
+
+const { tag } = Astro.params;
+const { recipes } = Astro.props;
+const label = tagLabels[tag] ?? tag;
+---
+
+<BaseLayout title={`#${label}`} description={`מתכוני בורקס עם התגית ${label}`} backHref="/recipes/" innerTitle={`#${label}`}>
+  <Container class="space-y-6">
+    <h1 class="text-headline-xl">#{label}</h1>
+    <RecipeGrid recipes={recipes} />
+  </Container>
+</BaseLayout>

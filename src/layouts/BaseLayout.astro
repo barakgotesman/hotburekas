@@ -1,0 +1,55 @@
+---
+import '@fontsource-variable/rubik';
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import BottomNav from '../components/BottomNav.astro';
+import Footer from '../components/Footer.astro';
+import { getSettings } from '../lib/reader';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown>;
+  /** Mobile back button target + short title for inner pages. */
+  backHref?: string;
+  innerTitle?: string;
+}
+const { title, description, image, type, jsonLd, backHref, innerTitle } = Astro.props;
+
+const settings = await getSettings();
+const siteTitle = settings.siteTitle || 'בורקס לוהט';
+const pageTitle = title ? `${title} | ${siteTitle}` : `${siteTitle} - ${settings.tagline ?? ''}`;
+---
+
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <SEO title={pageTitle} description={description ?? settings.heroText} image={image} type={type} jsonLd={jsonLd} />
+  </head>
+  <body class="min-h-screen">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[60] focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-on-primary"
+    >
+      דלג לתוכן
+    </a>
+    <Header siteTitle={siteTitle} tagline={settings.tagline} backHref={backHref} innerTitle={innerTitle} />
+    <main id="main" class="pt-20 lg:pt-24">
+      <slot />
+    </main>
+    <Footer siteTitle={siteTitle} footerText={settings.footerText} />
+    <BottomNav />
+  </body>
+</html>
+
+<script>
+  // Favorite buttons appear on cards across the site.
+  import '../scripts/favorites';
+</script>
