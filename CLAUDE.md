@@ -110,6 +110,7 @@ keystatic.config.ts        # Keystatic entry point: storage, admin UI (sidebar, 
 src/keystatic/             # Fields live here, one file per content type (the content model)
   recipes.ts  categories.ts  authors.ts  settings.ts
   shared.ts                # opts() and latinSlug helpers
+  icon-select.tsx          # custom field: select that shows SVG icons as buttons (category icon)
 src/lib/labels.ts          # select options (English value + Hebrew label), imported by src/keystatic/*
 astro.config.mjs           # Astro + integrations + Vercel adapter
 src/
