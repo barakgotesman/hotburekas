@@ -186,6 +186,7 @@ storage: import.meta.env.PROD
   - `KEYSTATIC_GITHUB_CLIENT_SECRET`
   - `KEYSTATIC_SECRET`
   - `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
+  - `SUBMISSIONS_GITHUB_TOKEN`, `SUBMISSIONS_GITHUB_REPO` (the `/submit` recipe form opens a draft pull request; see `.env.example`)
 - GitHub App callback URL must include the production domain:
   `https://burekas-lohet.vercel.app/api/keystatic/github/oauth/callback`
 - The admin login only works on registered URLs, so use the production domain for editing, not preview deployments.

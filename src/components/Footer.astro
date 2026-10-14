@@ -9,12 +9,13 @@ interface Props {
 const { siteTitle, footerText } = Astro.props;
 ---
 
-<footer class="mt-10 pb-28 pt-6 lg:pb-6 text-center text-on-surface-variant" data-print-hide>
+<footer class="mt-16 border-t-2 border-ink bg-inverse-surface pb-28 pt-10 text-center text-inverse-on-surface lg:pb-10" data-print-hide>
   <Container>
     <LogoMark class="mx-auto mb-2 size-12" />
-    <p class="text-label-md">{footerText}</p>
+    <p class="font-display text-2xl text-primary-container">{footerText}</p>
     <p class="mt-1 text-label-sm">
       {siteTitle} •
+      <a href="/submit/" class="underline underline-offset-2">שליחת מתכון</a> •
       <a href="/rss.xml" class="underline underline-offset-2">RSS</a>
     </p>
   </Container>

@@ -11,7 +11,7 @@ export default config({
   storage: import.meta.env.PROD
     ? {
         kind: 'github',
-        repo: { owner: 'YOUR_GITHUB_USER', name: 'burekas-lohet' },
+        repo: { owner: 'barakgotesman', name: 'hotburekas' },
         // Editors work on `content/...` branches; Vercel builds a preview per branch and `main` stays protected.
         branchPrefix: 'content/',
       }

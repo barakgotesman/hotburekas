@@ -18,15 +18,16 @@ const nav = [
   { href: '/recipes/', label: 'מתכונים' },
   { href: '/categories/', label: 'קטגוריות' },
   { href: '/favorites/', label: 'מועדפים' },
+  { href: '/submit/', label: 'שליחת מתכון' },
 ];
 /** Home is active only on "/", other links match by prefix. */
 const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 const iconBtn =
-  'flex size-11 items-center justify-center rounded-xl bg-surface-container-low text-on-surface transition hover:bg-surface-container-high';
+  'flex size-11 items-center justify-center rounded-xl border-2 border-ink bg-surface-container-lowest text-on-surface shadow-soft transition hover:bg-primary-container active:translate-x-[-2px] active:translate-y-[2px] active:shadow-none';
 ---
 
 <header
-  class="fixed inset-x-0 top-0 z-50 bg-surface/90 shadow-[0_4px_20px_rgb(42_23_15/0.06)] backdrop-blur-xl"
+  class="fixed inset-x-0 top-0 z-50 border-b-2 border-ink bg-surface"
   data-print-hide
 >
   <Container class="flex h-16 items-center justify-between gap-3 lg:h-20">
@@ -41,7 +42,7 @@ const iconBtn =
           <a href={backHref} class={iconBtn} aria-label="חזרה">
             <Icon name="material-symbols:arrow-forward" class="size-6" aria-hidden="true" />
           </a>
-          {innerTitle && <p class="truncate text-headline-sm">{innerTitle}</p>}
+          {innerTitle && <p class="truncate font-display text-xl">{innerTitle}</p>}
         </div>
       )
     }
@@ -52,7 +53,7 @@ const iconBtn =
           <a
             href={item.href}
             aria-current={isActive(item.href) ? 'page' : undefined}
-            class="rounded-xl px-4 py-2.5 text-label-lg text-on-surface-variant transition hover:text-on-surface aria-[current=page]:bg-primary-container aria-[current=page]:text-on-primary-container"
+            class="rounded-xl border-2 border-transparent px-4 py-2.5 text-label-lg text-on-surface transition hover:border-ink aria-[current=page]:border-ink aria-[current=page]:bg-primary-container aria-[current=page]:shadow-soft"
           >
             {item.label}
           </a>

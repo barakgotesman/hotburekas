@@ -1,0 +1,212 @@
+---
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Button from '../components/Button.astro';
+import { getCategories } from '../lib/reader';
+import { difficultyOptions, kashrutOptions, unitOptions, groupOptions, tagOptions } from '../lib/labels';
+
+const categories = await getCategories();
+
+// Shared look for every form control: 16px text (no iOS zoom) and a 48px touch target.
+const control =
+  'min-h-12 w-full rounded-xl border-2 border-ink bg-surface-container-lowest px-3 py-2.5 text-base placeholder:text-on-surface-variant/70 focus:bg-primary-fixed focus:outline-none';
+const label = 'mb-1 block text-label-lg';
+const hint = 'mt-1 text-label-md font-normal text-on-surface-variant';
+const card = 'space-y-4 rounded-2xl border-2 border-ink bg-surface-container-low p-5 shadow-soft';
+const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-md text-secondary';
+---
+
+<BaseLayout
+  title="שליחת מתכון"
+  description="יש לכם מתכון בורקס מנצח? שלחו אותו אלינו ונפרסם אותו באתר לאחר בדיקה."
+  backHref="/"
+  innerTitle="שליחת מתכון"
+>
+  <Container class="mx-auto max-w-2xl space-y-6 pt-6">
+    <header class="space-y-2">
+      <h1 class="text-4xl leading-tight lg:text-6xl">שלחו לנו מתכון</h1>
+      <p class="text-on-surface-variant">
+        מלאו את הפרטים ונבדוק את המתכון לפני הפרסום. מתכון שנשלח לא עולה לאתר אוטומטית.
+      </p>
+    </header>
+
+    <noscript>
+      <p class="rounded-2xl border-2 border-dashed border-ink bg-surface-container-low p-6 text-center">טופס שליחת המתכון דורש JavaScript.</p>
+    </noscript>
+
+    <form id="submit-form" novalidate class="relative space-y-6">
+      {/* Honeypot: invisible to people, bots fill it in. Hidden from assistive tech too. */}
+      <div class="absolute -start-[9999px]" aria-hidden="true">
+        <label>אתר<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      </div>
+
+      <fieldset class={card}>
+        <legend class="font-display text-2xl">על המתכון</legend>
+        <div>
+          <label for="f-title" class={label}>שם המתכון</label>
+          <input id="f-title" name="title" type="text" required maxlength="80" class={control} />
+        </div>
+        <div>
+          <label for="f-summary" class={label}>תיאור קצר</label>
+          <textarea id="f-summary" name="summary" required minlength="20" maxlength="300" rows="3" class={control}></textarea>
+          <p class={hint}>משפט או שניים (20 עד 300 תווים). יוצג בכרטיס המתכון.</p>
+        </div>
+        <div>
+          <label for="f-category" class={label}>קטגוריה</label>
+          <select id="f-category" name="category" required class={control}>
+            <option value="">בחרו קטגוריה</option>
+            {categories.map((c) => <option value={c.slug}>{c.entry.name}</option>)}
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="f-kashrut" class={label}>כשרות</label>
+            <select id="f-kashrut" name="kashrut" required class={control}>
+              <option value="">בחרו</option>
+              {kashrutOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+            </select>
+          </div>
+          <div>
+            <label for="f-difficulty" class={label}>רמת קושי</label>
+            <select id="f-difficulty" name="difficulty" required class={control}>
+              <option value="">בחרו</option>
+              {difficultyOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label for="f-prep" class={label}>הכנה (דק׳)</label>
+            <input id="f-prep" name="prepMinutes" type="number" inputmode="numeric" min="0" max="600" value="20" required class={control} />
+          </div>
+          <div>
+            <label for="f-cook" class={label}>בישול (דק׳)</label>
+            <input id="f-cook" name="cookMinutes" type="number" inputmode="numeric" min="0" max="600" value="30" required class={control} />
+          </div>
+          <div>
+            <label for="f-servings" class={label}>מנות</label>
+            <input id="f-servings" name="servings" type="number" inputmode="numeric" min="1" max="100" value="8" required class={control} />
+          </div>
+        </div>
+        <fieldset>
+          <legend class={label}>תגיות (לא חובה)</legend>
+          <div class="flex flex-wrap gap-2">
+            {
+              tagOptions.map((o) => (
+                <label class="flex min-h-11 cursor-pointer items-center gap-2 rounded-full border-2 border-ink bg-surface-container-lowest px-3 text-label-md has-[:checked]:bg-primary-container">
+                  <input type="checkbox" name="tags" value={o.value} class="size-4 accent-primary" />
+                  {o.label}
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+      </fieldset>
+
+      <fieldset class={card}>
+        <legend class="font-display text-2xl">מצרכים</legend>
+        <p class={hint}>כמות יכולה להיות מספר, ½ או 1.5. השאירו ריק עבור "לפי הטעם".</p>
+        <ol id="ingredient-list" class="space-y-4"></ol>
+        <Button type="button" variant="secondary" id="add-ingredient" class="w-full">
+          <Icon name="material-symbols:add" class="size-5" aria-hidden="true" />
+          הוספת מצרך
+        </Button>
+      </fieldset>
+
+      <fieldset class={card}>
+        <legend class="font-display text-2xl">אופן ההכנה</legend>
+        <ol id="step-list" class="space-y-4"></ol>
+        <Button type="button" variant="secondary" id="add-step" class="w-full">
+          <Icon name="material-symbols:add" class="size-5" aria-hidden="true" />
+          הוספת שלב
+        </Button>
+        <div>
+          <label for="f-tip" class={label}>טיפ מהשף (לא חובה)</label>
+          <textarea id="f-tip" name="chefTip" rows="2" maxlength="400" class={control}></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset class={card}>
+        <legend class="font-display text-2xl">תמונה</legend>
+        <div>
+          <label for="f-photo" class={label}>תמונה של המנה</label>
+          <input
+            id="f-photo"
+            name="photo"
+            type="file"
+            accept="image/*"
+            required
+            class={`${control} file:me-3 file:rounded-lg file:border-0 file:bg-primary-container file:px-3 file:py-1.5 file:font-bold`}
+          />
+          <p class={hint}>תמונה לרוחב, באור טוב. היא מוקטנת אוטומטית לפני השליחה.</p>
+        </div>
+        <img id="photo-preview" alt="" hidden class="aspect-[4/3] w-full rounded-xl border-2 border-ink object-cover" />
+      </fieldset>
+
+      <fieldset class={card}>
+        <legend class="font-display text-2xl">פרטי השולח</legend>
+        <p class={hint}>
+          לא חובה. אפשר להשאיר שם כדי שנוכל לתת קרדיט, ואימייל כדי שנחזור אליכם. הפרטים נשמרים בבקשת הפרסום הפנימית שלנו ואינם מוצגים באתר.
+        </p>
+        <div>
+          <label for="f-name" class={label}>שם</label>
+          <input id="f-name" name="submitterName" type="text" maxlength="80" autocomplete="name" class={control} />
+        </div>
+        <div>
+          <label for="f-email" class={label}>אימייל</label>
+          <input id="f-email" name="submitterEmail" type="email" maxlength="120" autocomplete="email" dir="ltr" class={`${control} text-start`} />
+        </div>
+      </fieldset>
+
+      <div role="status" aria-live="polite" id="submit-status" class="hidden"></div>
+
+      <Button type="submit" variant="heat" id="submit-button" class="w-full">
+        <Icon name="material-symbols:send-outline" class="size-5 rtl:-scale-x-100" aria-hidden="true" />
+        שליחת המתכון
+      </Button>
+    </form>
+
+    {/* Row templates cloned by the script; row titles ("מצרך 1") are filled in there. */}
+    <template id="ingredient-template">
+      <li class="space-y-3 rounded-xl border-2 border-ink bg-surface-container-lowest p-3">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-label-lg" data-row-title></p>
+          <button type="button" data-remove class={removeBtn}>
+            <Icon name="material-symbols:delete-outline" class="size-5" aria-hidden="true" />
+            הסרה
+          </button>
+        </div>
+        <select name="group" aria-label="קבוצה" class={control}>
+          {groupOptions.map((o) => <option value={o.value} selected={o.value === 'filling'}>{o.label}</option>)}
+        </select>
+        <div class="grid grid-cols-2 gap-3">
+          <input name="amount" type="text" inputmode="decimal" placeholder="כמות" aria-label="כמות" maxlength="20" class={control} />
+          <select name="unit" aria-label="יחידה" class={control}>
+            {unitOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+        <input name="name" type="text" placeholder="שם המצרך" aria-label="שם המצרך" maxlength="80" class={control} />
+        <input name="note" type="text" placeholder="הערה (למשל: מופשרים)" aria-label="הערה" maxlength="80" class={control} />
+      </li>
+    </template>
+
+    <template id="step-template">
+      <li class="space-y-3 rounded-xl border-2 border-ink bg-surface-container-lowest p-3">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-label-lg" data-row-title></p>
+          <button type="button" data-remove class={removeBtn}>
+            <Icon name="material-symbols:delete-outline" class="size-5" aria-hidden="true" />
+            הסרה
+          </button>
+        </div>
+        <input name="stepTitle" type="text" placeholder="כותרת קצרה (לא חובה)" aria-label="כותרת השלב" maxlength="60" class={control} />
+        <textarea name="stepText" rows="3" placeholder="מה עושים בשלב הזה" aria-label="תיאור השלב" maxlength="800" class={control}></textarea>
+      </li>
+    </template>
+  </Container>
+</BaseLayout>
+
+<script>
+  import '../scripts/submit-recipe';
+</script>
