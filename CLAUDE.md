@@ -61,6 +61,7 @@ export default defineConfig({
 - The older `@astrojs/tailwind` integration is for Tailwind v3; for v4 use the Vite plugin above. If the installed versions differ, check the current Astro + Tailwind docs.
 - Put design tokens (colors, fonts, spacing) in `@theme` in `global.css`, and reuse them instead of arbitrary values like `text-[#d97706]`.
 - Use `@tailwindcss/typography` (`prose`) for rendered Markdoc content, and verify it in RTL.
+- **No emojis anywhere** (UI, content, labels, Keystatic fields, CSS `content`). Use SVG icons only: Material Symbols via `astro-icon` (`material-symbols:*`) or our custom bakery symbols in `src/icons/*.svg` (`flame`, `steam`, `sesame`, `cat-*`) and the multi-color logo `LogoMark.astro`. Single-color custom icons use `currentColor`; the logo uses Tailwind token classes (`fill-secondary`), so recoloring in `global.css` works. The heat meter is `HeatFlames.astro` (1-3 flame icons), the brand lockup is `Logo.astro`.
 - Extract repeated class lists into Astro components (RecipeCard, Button), not into `@apply` piles.
 
 ## Hebrew and RTL rules (important)

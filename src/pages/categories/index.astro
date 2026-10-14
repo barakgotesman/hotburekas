@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Container from '../../components/Container.astro';
+import { Icon } from 'astro-icon/components';
 import TiltCard from '../../components/TiltCard.astro';
 import { getCategories, getPublishedRecipes } from '../../lib/reader';
 
@@ -18,7 +19,7 @@ const countIn = (slug: string) => recipes.filter((r) => r.entry.category === slu
           <li>
             <TiltCard index={i} class="bg-surface-container-low p-5">
               <a href={`/categories/${cat.slug}/`} class="block after:absolute after:inset-0">
-                <span class="text-4xl" aria-hidden="true">{cat.entry.emoji}</span>
+                <Icon name={cat.entry.icon} class="size-10 text-secondary" aria-hidden="true" />
                 <h2 class="mt-2 text-headline-sm">{cat.entry.name}</h2>
                 <p class="mt-1 text-on-surface-variant">{cat.entry.description}</p>
                 <p class="mt-3 text-label-md font-bold text-primary">{countIn(cat.slug)} מתכונים</p>

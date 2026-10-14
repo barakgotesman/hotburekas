@@ -106,8 +106,13 @@
     @apply absolute -top-3 start-1/2 h-6 w-20 -translate-x-1/2 rotate-1 rounded bg-surface-container-lowest/80 shadow-soft;
   }
   aside.tip::after {
-    content: "💡";
-    @apply absolute start-4 top-4 flex size-10 items-center justify-center rounded-full bg-primary-container text-xl;
+    content: "";
+    /* Lightbulb drawn as a mask so it takes the text color of the theme */
+    @apply absolute start-4 top-4 size-10 rounded-full bg-primary-container;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235f3b00' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z'/%3E%3C/svg%3E");
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   aside.tip > strong.tip-title {
     @apply mb-1 block text-label-lg text-on-primary-fixed;

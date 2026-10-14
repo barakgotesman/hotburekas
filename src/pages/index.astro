@@ -34,7 +34,10 @@ const trending = recipes.slice(0, 4);
             </span>
             <span class="truncate">{settings.tickerText}</span>
           </p>
-          <span class="shrink-0 rounded-full bg-on-secondary px-2 py-0.5 text-label-sm text-secondary">לוהט 🔥</span>
+          <span class="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-on-secondary px-2 py-0.5 text-label-sm text-secondary">
+            לוהט
+            <Icon name="flame" class="size-3" aria-hidden="true" />
+          </span>
         </div>
       )
     }
@@ -117,7 +120,7 @@ const trending = recipes.slice(0, 4);
                   i === 2 ? 'bg-primary-container text-on-primary-container' : i % 2 ? 'bg-surface-container-lowest' : 'bg-surface-container-high',
                 ]}
               >
-                <span aria-hidden="true">{cat.entry.emoji}</span>
+                <Icon name={cat.entry.icon} class="size-5" aria-hidden="true" />
                 {cat.entry.name}
               </a>
             </li>

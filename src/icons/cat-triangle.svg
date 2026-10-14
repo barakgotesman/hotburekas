@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Triangle burekas with sesame seeds -->
+  <path d="M3.5 19.5 12 4.5l8.5 15z"/>
+  <path stroke-dasharray="0.1 2.6" d="M6.5 16.5h11"/>
+  <g fill="currentColor" stroke="none">
+    <circle cx="12" cy="11.5" r=".95"/>
+    <circle cx="9.8" cy="14.2" r=".95"/>
+    <circle cx="14.2" cy="14.2" r=".95"/>
+  </g>
+</svg>

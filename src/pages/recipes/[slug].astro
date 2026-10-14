@@ -7,6 +7,7 @@ import Container from '../../components/Container.astro';
 import IngredientList from '../../components/IngredientList.astro';
 import KashrutBadge from '../../components/KashrutBadge.astro';
 import Sticker from '../../components/Sticker.astro';
+import HeatFlames from '../../components/HeatFlames.astro';
 import { getPublishedRecipes, reader, renderSteps } from '../../lib/reader';
 import { resolveImage } from '../../lib/images';
 import { formatMinutes, isoDuration } from '../../lib/format';
@@ -32,7 +33,7 @@ const shareImage = cover ? (await getImage({ src: cover, width: 1200, height: 63
 const heat = heatInfo[entry.difficulty] ?? heatInfo.easy;
 
 const tiles = [
-  { label: 'מד חום וקושי', value: `${heat.name} ${heat.flames}`, icon: 'material-symbols:local-fire-department', tone: 'bg-secondary-container text-on-secondary-container' },
+  { label: 'מד חום וקושי', value: heat.name, flames: heat.level, icon: 'material-symbols:local-fire-department', tone: 'bg-secondary-container text-on-secondary-container' },
   { label: 'כשרות', value: kashrutLabels[entry.kashrut], icon: 'material-symbols:workspace-premium', tone: 'bg-tertiary-container text-on-tertiary-container' },
   { label: 'זמן אפייה', value: formatMinutes(entry.cookMinutes), icon: 'material-symbols:timer-outline', tone: 'bg-primary-container text-on-primary-container' },
   { label: 'זמן הכנה', value: formatMinutes(entry.prepMinutes), icon: 'material-symbols:countertops-outline', tone: 'bg-surface-container-highest text-on-surface' },
@@ -84,7 +85,8 @@ const actionBtn =
                 href={`/categories/${entry.category}/`}
                 class="inline-flex min-h-8 items-center rounded-full bg-secondary-fixed px-3 text-label-sm text-on-secondary-fixed"
               >
-                {category.emoji} {category.name}
+                <Icon name={category.icon} class="size-4" aria-hidden="true" />
+                {category.name}
               </a>
             )
           }
@@ -153,7 +155,10 @@ const actionBtn =
             </span>
             <div class="min-w-0">
               <p class="text-label-sm text-on-surface-variant">{t.label}</p>
-              <p class="truncate text-label-md">{t.value}</p>
+              <p class="flex items-center gap-1 truncate text-label-md">
+                {t.value}
+                {t.flames && <HeatFlames level={t.flames} class="size-3.5 text-secondary" />}
+              </p>
             </div>
           </li>
         ))

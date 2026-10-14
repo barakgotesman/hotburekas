@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import Container from './Container.astro';
+import Logo from './Logo.astro';
 
 interface Props {
   siteTitle: string;
@@ -31,13 +32,7 @@ const iconBtn =
   <Container class="flex h-16 items-center justify-between gap-3 lg:h-20">
     {/* Brand (always on desktop; on mobile only when this isn't an inner page) */}
     <a href="/" class:list={['items-center gap-2', backHref ? 'hidden lg:flex' : 'flex']}>
-      <span class="relative flex size-10 items-center justify-center rounded-full bg-primary-container text-xl ring-2 ring-primary-container/40">
-        🔥
-      </span>
-      <span class="flex flex-col leading-tight">
-        <span class="text-headline-sm">{siteTitle}</span>
-        {tagline && <span class="text-label-sm text-secondary">{tagline}</span>}
-      </span>
+      <Logo siteTitle={siteTitle} tagline={tagline} />
     </a>
 
     {

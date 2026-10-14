@@ -42,6 +42,16 @@ export const tagOptions = [
   { value: 'vegetarian', label: 'צמחוני' },
 ] as const;
 
+/** Category icons: `value` is the file name in src/icons (custom SVG symbols). */
+export const categoryIconOptions = [
+  { value: 'cat-triangle', label: 'Triangle burekas' },
+  { value: 'cat-snail', label: 'Spiral / snail' },
+  { value: 'cat-wave', label: 'Waves (water burekas)' },
+  { value: 'cat-leaf', label: 'Leaf (greens)' },
+  { value: 'cat-honey', label: 'Honey drop (sweet)' },
+  { value: 'flame', label: 'Flame' },
+] as const;
+
 type Option = { readonly value: string; readonly label: string };
 const toMap = (opts: readonly Option[]) =>
   Object.fromEntries(opts.map((o) => [o.value, o.label])) as Record<string, string>;
@@ -52,11 +62,11 @@ export const unitLabels = toMap(unitOptions);
 export const groupLabels = toMap(groupOptions);
 export const tagLabels = toMap(tagOptions);
 
-/** Difficulty is shown as a "heat meter" (מד חום). */
-export const heatInfo: Record<string, { name: string; level: 1 | 2 | 3; flames: string; classes: string }> = {
-  easy: { name: 'פושר', level: 1, flames: '🔥', classes: 'bg-primary-container text-on-primary-container' },
-  medium: { name: 'חם', level: 2, flames: '🔥🔥', classes: 'bg-secondary-container text-on-secondary-container' },
-  hard: { name: 'לוהט', level: 3, flames: '🔥🔥🔥', classes: 'bg-secondary text-on-secondary' },
+/** Difficulty is shown as a "heat meter" (מד חום): `level` flame icons (see HeatFlames.astro). */
+export const heatInfo: Record<string, { name: string; level: 1 | 2 | 3; classes: string }> = {
+  easy: { name: 'פושר', level: 1, classes: 'bg-primary-container text-on-primary-container' },
+  medium: { name: 'חם', level: 2, classes: 'bg-secondary-container text-on-secondary-container' },
+  hard: { name: 'לוהט', level: 3, classes: 'bg-secondary text-on-secondary' },
 };
 
 export const kashrutInfo: Record<string, { classes: string }> = {

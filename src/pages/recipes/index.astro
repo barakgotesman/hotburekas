@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Container from '../../components/Container.astro';
 import RecipeCard from '../../components/RecipeCard.astro';
 import { getPublishedRecipes } from '../../lib/reader';
+import HeatFlames from '../../components/HeatFlames.astro';
 import { kashrutOptions, difficultyOptions, heatInfo } from '../../lib/labels';
 
 const recipes = await getPublishedRecipes();
@@ -46,12 +47,16 @@ const chip =
         <span class="shrink-0 ps-2 text-label-sm font-bold text-on-surface-variant">מד חום:</span>
         {
           difficultyOptions.map((o) => (
-            <button type="button" data-filter="heat" data-value={o.value} aria-pressed="false" class={chip}>
-              {heatInfo[o.value].name} {heatInfo[o.value].flames}
+            <button type="button" data-filter="heat" data-value={o.value} aria-pressed="false" class={`${chip} inline-flex items-center gap-1`}>
+              {heatInfo[o.value].name}
+              <HeatFlames level={heatInfo[o.value].level} class="size-3.5 text-secondary" />
             </button>
           ))
         }
-        <button type="button" data-filter="quick" aria-pressed="false" class={chip}>⏱️ עד 30 דק׳</button>
+        <button type="button" data-filter="quick" aria-pressed="false" class={`${chip} inline-flex items-center gap-1`}>
+          <Icon name="material-symbols:timer-outline" class="size-4" aria-hidden="true" />
+          עד 30 דק׳
+        </button>
       </div>
     </Container>
   </section>
@@ -65,8 +70,8 @@ const chip =
       <label class="flex items-center gap-1.5 text-label-md">
         <span class="sr-only">מיון</span>
         <select id="recipe-sort" class="min-h-11 rounded-lg bg-surface-container-high px-3 text-label-md">
-          <option value="new">הכי חדש 🔥</option>
-          <option value="time">הכי מהיר בתנור ⚡</option>
+          <option value="new">הכי חדש</option>
+          <option value="time">הכי מהיר בתנור</option>
         </select>
       </label>
     </div>

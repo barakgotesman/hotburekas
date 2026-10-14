@@ -1,0 +1,20 @@
+---
+// Brand lockup: the burekas mark (LogoMark.astro) + site name + optional tagline.
+import LogoMark from './LogoMark.astro';
+
+interface Props {
+  siteTitle: string;
+  tagline?: string;
+  /** Mark size classes. */
+  markClass?: string;
+}
+const { siteTitle, tagline, markClass = 'size-11' } = Astro.props;
+---
+
+<span class="flex items-center gap-2">
+  <LogoMark class={markClass} />
+  <span class="flex flex-col leading-tight">
+    <span class="text-headline-sm font-black">{siteTitle}</span>
+    {tagline && <span class="text-label-sm text-secondary">{tagline}</span>}
+  </span>
+</span>

@@ -79,6 +79,7 @@ The Stitch screens are **mobile-first, single column**, and that is the primary 
   - **Fixed top header**, 64-80px: brand mark + name "בורקס לוהט" with the tagline "חם, פריך ולא שפוי" in the secondary color, and square 44px icon buttons (search, notifications). On inner pages: a back button, a short title, and a share button.
   - **Fixed bottom tab bar**, 80px, 4 tabs: ראשי, מתכונים, מועדפים, מצב אפייה. Active tab is a filled `primary-container` pill with a soft glow, inactive tabs are muted. This replaces a hamburger menu on mobile; on desktop it becomes a normal horizontal nav.
   - Reserve space so fixed bars never cover content (`pt-20`, `pb-28`, and safe-area insets).
+- **No emojis, SVG icons only.** Material Symbols via `astro-icon`, plus custom bakery symbols in `src/icons/` (flame, steam, sesame, category icons) and the logo `LogoMark.astro` (flame above a crimped, sesame-dusted triangle burekas; inline SVG because astro-icon flattens multi-color icons). Heat is shown with 1-3 flame icons. The Stitch screens use emojis in chips and badges: replace them with these icons.
 - Icons: Material Symbols Outlined, with `FILL 1` for active or emphasized states. Direction icons (arrow, chevron) must mirror in RTL (the screens use `arrow_back` / `chevron_left` as "forward").
 
 ## Pages
@@ -86,13 +87,13 @@ The Stitch screens are **mobile-first, single column**, and that is the primary 
 ### Home
 1. **Live ticker** strip in `secondary`: pulsing dot + one line of bakery news + a "לוהט 🔥" pill.
 2. **Hero card** (`surface-container-low`, rounded-xl): angled stamp sticker in a corner ("הלהיט של ..."), heavy two-line headline with the second line highlighted, one-sentence intro, a 4:3 food photo with a small glass caption badge, and a search field with an inline amber button.
-3. **Category chips**: horizontally scrolling emoji chips ("בחרו סגנון למגש"), one active in `primary-container`, others in light surfaces. Full-bleed scroll (negative gutter margin).
+3. **Category chips**: horizontally scrolling icon chips (custom SVG category icons) ("בחרו סגנון למגש"), one active in `primary-container`, others in light surfaces. Full-bleed scroll (negative gutter margin).
 4. **Recipe of the week**: a tilted `surface-container` card with kashrut pill, heat pill, title, summary, a chef quote block, a two-up stats tile (oven time, yield), and a full-width primary button.
 5. **Trending**: vertical stack of recipe cards (see below), section link "לכל המגשים".
 6. **Community banner**: centered `surface-container-high` block with an icon, a warm line, and a `secondary` button.
 
 ### Recipe list
-- **Sticky search + filter header** (blurred `surface`): soft search field with a search icon; row 1 of scrollable filter chips (kashrut: הכל / חלבי / פרווה / בשרי, with emoji); row 2 of heat filters (פושר / חם / לוהט, each with a colored dot) and quick time filter ("עד 30 דק׳").
+- **Sticky search + filter header** (blurred `surface`): soft search field with a search icon; row 1 of scrollable filter chips (kashrut: הכל / חלבי / פרווה / בשרי, with icons); row 2 of heat filters (פושר / חם / לוהט, each with a colored dot) and quick time filter ("עד 30 דק׳").
 - **Count + sort row**: pulsing dot + "24 מתכונים פריכים", and a sort dropdown ("הכי לוהט כרגע").
 - **Recipe card stream**: single column, `gap-6`, alternating tilt and alternating background (`surface-container-low` / `surface-container-lowest`).
 

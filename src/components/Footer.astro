@@ -1,4 +1,5 @@
 ---
+import LogoMark from './LogoMark.astro';
 import Container from './Container.astro';
 
 interface Props {
@@ -10,6 +11,7 @@ const { siteTitle, footerText } = Astro.props;
 
 <footer class="mt-10 pb-28 pt-6 lg:pb-6 text-center text-on-surface-variant" data-print-hide>
   <Container>
+    <LogoMark class="mx-auto mb-2 size-12" />
     <p class="text-label-md">{footerText}</p>
     <p class="mt-1 text-label-sm">
       {siteTitle} •

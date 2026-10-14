@@ -1,6 +1,6 @@
 import { config, collection, singleton, fields } from '@keystatic/core';
 import { wrapper } from '@keystatic/core/content-components';
-import { difficultyOptions, kashrutOptions, unitOptions, groupOptions, tagOptions } from './src/lib/labels';
+import { difficultyOptions, kashrutOptions, unitOptions, groupOptions, tagOptions, categoryIconOptions } from './src/lib/labels';
 
 // Copies the readonly tuples from labels.ts into the mutable arrays Keystatic's select fields expect.
 const opts = (o: readonly { value: string; label: string }[]) => o.map((x) => ({ ...x }));
@@ -89,7 +89,7 @@ export default config({
           name: { label: 'Name (Hebrew)', validation: { isRequired: true } },
           slug: { label: 'URL slug (Latin)', validation: latinSlug },
         }),
-        emoji: fields.text({ label: 'Emoji' }),
+        icon: fields.select({ label: 'Icon', options: opts(categoryIconOptions), defaultValue: 'cat-triangle' }),
         description: fields.text({ label: 'Description', multiline: true }),
       },
     }),
