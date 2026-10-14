@@ -22,57 +22,64 @@ const trending = recipes.slice(0, 4);
 ---
 
 <BaseLayout>
-  <Container class="space-y-8">
-    {/* 1. Live ticker */}
-    {
-      settings.tickerText && (
-        <div class="flex items-center justify-between gap-2 rounded-xl bg-secondary p-2 text-on-secondary shadow-card">
-          <p class="flex min-w-0 items-center gap-2 text-label-md">
-            <span class="relative flex size-3 shrink-0" aria-hidden="true">
-              <span class="absolute inline-flex size-full animate-ping rounded-full bg-surface opacity-75" />
-              <span class="relative inline-flex size-3 rounded-full bg-primary-container" />
-            </span>
-            <span class="truncate">{settings.tickerText}</span>
-          </p>
-          <span class="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-on-secondary px-2 py-0.5 text-label-sm text-secondary">
-            לוהט
-            <Icon name="flame" class="size-3" aria-hidden="true" />
-          </span>
+  {/* 1. Ticker: full-bleed ink strip, the news scrolls past like a shop-window sign.
+      The track holds two identical copies and animates by 50%, so the loop is seamless. */}
+  {
+    settings.tickerText && (
+      <div class="overflow-hidden border-b-2 border-ink bg-inverse-surface text-primary-container">
+        <p class="sr-only">{settings.tickerText}</p>
+        <div class="flex w-max animate-marquee items-center py-2" aria-hidden="true">
+          {[0, 1].map(() => (
+            <div class="flex shrink-0 items-center">
+              {[0, 1, 2, 3].map(() => (
+                <span class="flex items-center gap-4 pe-4 text-label-lg">
+                  <Icon name="sesame" class="size-4 text-secondary-container" />
+                  {settings.tickerText}
+                  <Icon name="flame" class="size-4 text-secondary-container" />
+                </span>
+              ))}
+            </div>
+          ))}
         </div>
-      )
-    }
+      </div>
+    )
+  }
 
-    {/* 2. Hero: text + search, image beside it on desktop */}
-    <section class="relative overflow-hidden rounded-2xl bg-surface-container-low p-4 shadow-card lg:grid lg:grid-cols-2 lg:items-center lg:gap-10 lg:p-10">
+  <Container class="space-y-14 pt-8 lg:space-y-20 lg:pt-12">
+    {/* 2. Hero poster: giant stamped headline, tomato highlight label, tilted photo */}
+    <section class="relative md:grid md:grid-cols-[1.05fr_1fr] md:items-center md:gap-10 lg:gap-14">
       {
         settings.heroStamp && (
-          <Sticker tone="crust" class="absolute -start-2 top-2 z-10 -rotate-12 !rounded-lg bg-secondary-container !text-on-secondary-container">
-            <Icon name="material-symbols:local-fire-department" class="size-3.5" aria-hidden="true" />
-            {settings.heroStamp}
-          </Sticker>
+          <div class="absolute -top-3 end-0 z-20 flex size-24 rotate-12 flex-col items-center justify-center gap-0.5 rounded-full border-2 border-ink bg-primary-container p-2 text-center text-on-primary-container shadow-card outline-2 -outline-offset-[7px] outline-dashed outline-ink md:-top-6 md:size-28">
+            <Icon name="material-symbols:local-fire-department" class="size-5 text-secondary" aria-hidden="true" />
+            <span class="font-display text-label-md leading-tight">{settings.heroStamp}</span>
+          </div>
         )
       }
-      <div class="pt-2">
-        <h1 class="text-display tracking-tight">
-          {settings.heroTitle}<br />
-          <span class="text-secondary">{settings.heroHighlight}</span>
+      <div>
+        <h1 class="pe-20 text-[clamp(3rem,13.5vw,4.5rem)] leading-[0.95] md:pe-0 md:text-[clamp(2.75rem,6.5vw,7rem)]">
+          {settings.heroTitle}
+          <br />
+          <span class="mt-3 inline-block -rotate-1 whitespace-nowrap rounded-md border-2 border-ink bg-secondary px-3 pb-1 text-[0.8em] text-on-secondary shadow-card">
+            {settings.heroHighlight}
+          </span>
         </h1>
-        <p class="mt-2 max-w-[92%] text-on-surface-variant">{settings.heroText}</p>
+        <p class="mt-6 max-w-md text-lg font-medium text-on-surface-variant">{settings.heroText}</p>
 
-        <form action="/recipes/" method="get" role="search" class="relative mt-5 flex items-center">
-          <Icon name="material-symbols:skillet-outline" class="pointer-events-none absolute start-3 size-5 text-on-surface-variant" aria-hidden="true" />
+        <form action="/recipes/" method="get" role="search" class="relative mt-6 flex items-center">
+          <Icon name="material-symbols:skillet-outline" class="pointer-events-none absolute start-3 size-5 text-on-surface" aria-hidden="true" />
           <input
             type="search"
             name="q"
             aria-label="חיפוש מתכון"
-            placeholder="מה בא לכם לאפות היום? (קשקבל, תפו״א, מים...)"
-            class="min-h-12 w-full rounded-xl bg-surface-container-lowest py-3 ps-10 pe-24 text-base shadow-inner placeholder:text-on-surface-variant/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-container"
+            placeholder="מה בא לכם להכין היום?"
+            class="min-h-14 w-full rounded-xl border-2 border-ink bg-surface-container-lowest py-3 ps-10 pe-28 text-base shadow-card placeholder:text-on-surface-variant/70 focus:outline-none focus-visible:bg-primary-fixed"
           />
           <button
             type="submit"
-            class="absolute end-1.5 flex min-h-10 items-center gap-1 rounded-lg bg-primary-container px-3 text-label-md text-on-primary-container shadow-soft transition hover:bg-secondary-container"
+            class="absolute end-2 flex min-h-10 items-center gap-1 rounded-lg border-2 border-ink bg-secondary px-3 text-label-md text-on-secondary transition hover:bg-primary-container hover:text-on-primary-container active:scale-95"
           >
-            רידוד
+            חיפוש
             <Icon name="material-symbols:arrow-back" class="size-4" aria-hidden="true" />
           </button>
         </form>
@@ -80,7 +87,7 @@ const trending = recipes.slice(0, 4);
 
       {
         heroImage && (
-          <div class="relative mt-4 overflow-hidden rounded-xl bg-surface-container shadow-card lg:mt-0">
+          <div class="relative mt-10 rotate-1 rounded-2xl border-2 border-ink bg-surface-container-lowest p-2 shadow-card md:mt-0">
             <Picture
               src={heroImage}
               alt={settings.heroImageAlt ?? ''}
@@ -89,12 +96,12 @@ const trending = recipes.slice(0, 4);
               formats={['avif', 'webp']}
               loading="eager"
               fetchpriority="high"
-              class="aspect-[4/3] w-full object-cover"
+              class="aspect-[4/3] w-full rounded-lg border-2 border-ink object-cover"
             />
-            <div class="absolute bottom-2 end-2 flex items-center gap-1.5 rounded-lg bg-surface/90 px-2.5 py-1 text-label-sm backdrop-blur-md">
+            <Sticker tone="paper" class="absolute -bottom-3 start-4 z-10 -rotate-3 text-label-md">
               <Icon name="material-symbols:air" class="size-4 text-secondary" aria-hidden="true" />
-              בצק עלים ביתי מרודד
-            </div>
+              הוראות מפורטות לכל שלב
+            </Sticker>
           </div>
         )
       }
@@ -102,22 +109,19 @@ const trending = recipes.slice(0, 4);
 
     {/* 3. Category chips: scroll sideways on mobile, wrap on desktop */}
     <section aria-labelledby="cats-heading">
-      <div class="mb-2 flex items-center justify-between px-1">
-        <h2 id="cats-heading" class="flex items-center gap-1.5 text-headline-sm">
-          <Icon name="material-symbols:storefront-outline" class="size-6 text-secondary" aria-hidden="true" />
-          בחרו סגנון למגש
-        </h2>
-        <span class="text-label-sm text-on-surface-variant">הכל בעבודת יד</span>
+      <div class="mb-4 flex items-end justify-between px-1">
+        <h2 id="cats-heading" class="text-3xl leading-none">מתכונים לפי קטגוריה</h2>
+        <span class="text-label-md text-on-surface-variant">בחרו קטגוריה</span>
       </div>
-      <ul class="-mx-5 flex gap-2.5 overflow-x-auto px-5 pb-2 pt-1 lg:mx-0 lg:flex-wrap lg:px-0">
+      <ul class="-mx-5 flex gap-3 overflow-x-auto px-5 pb-3 pt-1 [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:px-0">
         {
           categories.map((cat, i) => (
             <li class="shrink-0">
               <a
                 href={`/categories/${cat.slug}/`}
                 class:list={[
-                  'flex min-h-11 items-center gap-1.5 rounded-xl px-3.5 py-2 text-label-md shadow-soft transition hover:-translate-y-0.5 active:scale-95',
-                  i === 2 ? 'bg-primary-container text-on-primary-container' : i % 2 ? 'bg-surface-container-lowest' : 'bg-surface-container-high',
+                  'flex min-h-12 items-center gap-2 rounded-full border-2 border-ink px-4 py-2 text-label-lg shadow-soft transition hover:-translate-y-0.5 hover:bg-primary-container active:translate-x-[-2px] active:translate-y-[2px] active:shadow-none',
+                  i === 2 ? 'bg-primary-container' : i % 2 ? 'bg-surface-container-lowest' : 'bg-surface-container-high',
                 ]}
               >
                 <Icon name={cat.entry.icon} class="size-5" aria-hidden="true" />
@@ -129,50 +133,51 @@ const trending = recipes.slice(0, 4);
       </ul>
     </section>
 
-    {/* 4. Recipe of the week */}
+    {/* 4. Recipe of the week: a saffron "special of the day" board */}
     {
       featured && (
         <section aria-labelledby="featured-heading">
-          <div class="mb-2 flex items-center justify-between px-1">
-            <h2 id="featured-heading" class="flex items-center gap-1.5 text-headline-sm">
-              <Icon name="material-symbols:award-star-outline" class="size-6 text-primary" aria-hidden="true" />
-              מתכון השבוע
-            </h2>
-            <span class="rounded-full bg-secondary px-2 py-0.5 text-label-sm text-on-secondary">סודי ביותר</span>
-          </div>
-          <TiltCard class="space-y-3 bg-surface-container p-4 lg:p-8" index={0}>
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <KashrutBadge kashrut={featured.entry.kashrut} />
-              <HeatBadge difficulty={featured.entry.difficulty} />
+          <TiltCard class="space-y-4 bg-primary-container p-5 pt-8 lg:grid lg:grid-cols-[1fr_auto] lg:gap-x-10 lg:space-y-0 lg:p-10" index={0}>
+            <Sticker tone="heat" class="absolute -top-4 start-5 z-10 text-label-md">
+              <Icon name="material-symbols:award-star" class="size-4" aria-hidden="true" />
+              <span id="featured-heading">מתכון השבוע</span>
+            </Sticker>
+            <div class="space-y-4">
+              <div class="flex flex-wrap items-center gap-2">
+                <KashrutBadge kashrut={featured.entry.kashrut} />
+                <HeatBadge difficulty={featured.entry.difficulty} />
+              </div>
+              <h3 class="text-4xl leading-[1.05] lg:text-6xl">{featured.entry.title}</h3>
+              <p class="text-lg font-medium text-on-primary-container/80">{featured.entry.summary}</p>
+              {featured.entry.chefTip && (
+                <blockquote class="flex items-start gap-2.5 rounded-xl border-2 border-ink bg-surface-container-lowest p-3">
+                  <Icon name="material-symbols:format-quote" class="mt-0.5 size-6 shrink-0 text-secondary" aria-hidden="true" />
+                  <p class="text-label-lg font-medium italic">״{featured.entry.chefTip}״</p>
+                </blockquote>
+              )}
             </div>
-            <h3 class="text-headline-lg font-extrabold">{featured.entry.title}</h3>
-            <p class="text-on-surface-variant">{featured.entry.summary}</p>
-            {featured.entry.chefTip && (
-              <blockquote class="flex items-start gap-2.5 rounded-xl bg-surface-container-high p-2.5">
-                <Icon name="material-symbols:format-quote" class="mt-0.5 size-6 shrink-0 text-secondary" aria-hidden="true" />
-                <p class="text-label-md font-medium italic">״{featured.entry.chefTip}״</p>
-              </blockquote>
-            )}
-            <dl class="grid grid-cols-2 gap-2 rounded-xl bg-surface-container-low p-2.5">
-              <div class="flex items-center gap-2">
-                <Icon name="material-symbols:timer-outline" class="size-8 rounded-lg bg-surface p-1.5 text-primary" aria-hidden="true" />
-                <div>
-                  <dt class="text-label-sm text-on-surface-variant">זמן בתנור</dt>
-                  <dd class="text-label-md">{formatMinutes(featured.entry.cookMinutes)}</dd>
+            <div class="space-y-4 lg:w-72 lg:self-end">
+              <dl class="grid grid-cols-2 gap-2 rounded-xl border-2 border-ink bg-surface-container-lowest p-3">
+                <div class="flex items-center gap-2">
+                  <Icon name="material-symbols:timer-outline" class="size-9 rounded-lg border-2 border-ink bg-primary-container p-1.5" aria-hidden="true" />
+                  <div>
+                    <dt class="text-label-sm text-on-surface-variant">זמן בישול</dt>
+                    <dd class="text-label-lg">{formatMinutes(featured.entry.cookMinutes)}</dd>
+                  </div>
                 </div>
-              </div>
-              <div class="flex items-center gap-2">
-                <Icon name="material-symbols:room-service-outline" class="size-8 rounded-lg bg-surface p-1.5 text-primary" aria-hidden="true" />
-                <div>
-                  <dt class="text-label-sm text-on-surface-variant">כמות במגש</dt>
-                  <dd class="text-label-md">{featured.entry.servings} יחידות</dd>
+                <div class="flex items-center gap-2">
+                  <Icon name="material-symbols:room-service-outline" class="size-9 rounded-lg border-2 border-ink bg-primary-container p-1.5" aria-hidden="true" />
+                  <div>
+                    <dt class="text-label-sm text-on-surface-variant">מספר מנות</dt>
+                    <dd class="text-label-lg">{featured.entry.servings} מנות</dd>
+                  </div>
                 </div>
-              </div>
-            </dl>
-            <Button href={`/recipes/${featured.slug}/`} variant="primary" class="w-full">
-              <Icon name="material-symbols:restaurant-menu" class="size-5" aria-hidden="true" />
-              פתח מתכון מלא ומדריך שכבות
-            </Button>
+              </dl>
+              <Button href={`/recipes/${featured.slug}/`} variant="primary" class="w-full">
+                <Icon name="material-symbols:restaurant-menu" class="size-5" aria-hidden="true" />
+                למתכון המלא
+              </Button>
+            </div>
           </TiltCard>
         </section>
       )
@@ -180,20 +185,20 @@ const trending = recipes.slice(0, 4);
 
     {/* 5. Trending */}
     <section>
-      <SectionHeading title="הכי לוהטים השבוע" icon="material-symbols:whatshot-outline" linkHref="/recipes/" linkText="לכל המגשים" />
-      <div class="grid gap-6 pt-1 sm:grid-cols-2 lg:grid-cols-4">
+      <SectionHeading title="המתכונים החדשים" icon="material-symbols:whatshot-outline" linkHref="/recipes/" linkText="לכל המתכונים" />
+      <div class="grid gap-8 pt-1 sm:grid-cols-2 lg:grid-cols-4">
         {trending.map((recipe, i) => <RecipeCard recipe={recipe} index={i} />)}
       </div>
     </section>
 
     {/* 6. Follow banner (RSS: no accounts or newsletter backend on this site) */}
-    <section class="rounded-2xl bg-surface-container-high p-4 text-center shadow-card">
-      <Icon name="material-symbols:bakery-dining-outline" class="mx-auto size-8 text-primary" aria-hidden="true" />
-      <h2 class="mt-1 text-headline-sm font-black">{settings.footerText}</h2>
-      <p class="mx-auto mt-1 max-w-sm text-label-md text-on-surface-variant">רוצים לדעת מתי יוצא מגש חדש? עקבו אחרי הפיד.</p>
-      <Button href="/rss.xml" variant="heat" class="mt-4 w-full sm:w-auto">
+    <section class="relative -rotate-1 rounded-2xl border-2 border-ink bg-secondary p-6 text-center text-on-secondary shadow-card lg:p-10">
+      <Icon name="material-symbols:bakery-dining-outline" class="mx-auto size-10 text-primary-container" aria-hidden="true" />
+      <h2 class="mt-2 text-3xl leading-tight lg:text-5xl">{settings.footerText}</h2>
+      <p class="mx-auto mt-2 max-w-sm text-label-lg font-medium">רוצים לדעת מתי מתפרסם מתכון חדש? עקבו אחרי הפיד.</p>
+      <Button href="/rss.xml" variant="crust" class="mt-5 w-full sm:w-auto">
         <Icon name="material-symbols:rss-feed" class="size-5" aria-hidden="true" />
-        עקבו אחרי המגשים החדשים
+        עקבו אחרי המתכונים החדשים
       </Button>
     </section>
   </Container>

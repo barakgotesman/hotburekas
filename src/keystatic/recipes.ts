@@ -63,7 +63,7 @@ export const recipes = collection({
     }),
     difficulty: fields.select({
       label: 'Difficulty (heat meter)',
-      description: 'easy = פושר (1 flame), medium = חם (2), hard = לוהט (3).',
+      description: 'Shown as 1 to 3 flame icons: easy = קל (1), medium = בינוני (2), hard = קשה (3).',
       options: opts(difficultyOptions),
       defaultValue: 'easy',
     }),
@@ -95,7 +95,7 @@ export const recipes = collection({
       components: {
         tip: wrapper({
           label: 'Chef tip',
-          schema: { title: fields.text({ label: 'Title', defaultValue: 'טיפ סודי מהשף' }) },
+          schema: { title: fields.text({ label: 'Title', defaultValue: 'טיפ מהשף' }) },
         }),
       },
     }),

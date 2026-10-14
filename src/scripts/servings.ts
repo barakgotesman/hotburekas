@@ -15,7 +15,7 @@ if (root) {
    * Quantities without a numeric data-base (e.g. "לפי הטעם") keep their original text.
    */
   function render() {
-    if (display) display.textContent = `${current} יח׳`;
+    if (display) display.textContent = `${current} מנות`;
     const factor = current / base;
     quantities.forEach((el) => {
       el.textContent = formatQuantity(Number(el.dataset.base) * factor);

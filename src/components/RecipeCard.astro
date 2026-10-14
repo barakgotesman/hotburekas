@@ -40,7 +40,7 @@ const searchText = [
   index={index}
   class:list={[
     'recipe-card group overflow-hidden',
-    index % 2 ? 'bg-surface-container-lowest' : 'bg-surface-container-low',
+    index % 2 ? 'bg-surface-container-lowest' : 'bg-primary-fixed',
   ]}
   data-recipe-card
   data-kashrut={entry.kashrut}
@@ -48,7 +48,7 @@ const searchText = [
   data-minutes={totalMin}
   data-search={searchText}
 >
-  <div class="relative h-56 overflow-hidden bg-surface-container sm:h-60">
+  <div class="relative h-56 overflow-hidden rounded-t-[calc(var(--radius-2xl)-2px)] border-b-2 border-ink bg-surface-container sm:h-60">
     {
       cover && (
         <Picture
@@ -62,11 +62,11 @@ const searchText = [
         />
       )
     }
-    <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-transparent to-black/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/70 via-transparent to-transparent"></div>
 
     <Sticker class="absolute start-3.5 top-3.5 z-10">
       <Icon name="material-symbols:timer-outline" class="size-4" aria-hidden="true" />
-      {formatMinutes(entry.cookMinutes)} אפייה
+      {formatMinutes(entry.cookMinutes)} בישול
     </Sticker>
 
     {/* Favorite toggle: state is handled by src/scripts/favorites.ts (aria-pressed) */}
@@ -75,7 +75,7 @@ const searchText = [
       data-fav={slug}
       aria-pressed="false"
       aria-label={`שמירת ${entry.title} למועדפים`}
-      class="group/fav absolute end-3.5 top-3.5 z-20 flex size-11 items-center justify-center rounded-full bg-surface-container-lowest/90 text-on-surface-variant shadow-card backdrop-blur-sm transition active:scale-90 aria-pressed:text-secondary"
+      class="group/fav absolute end-3.5 top-3.5 z-20 flex size-11 items-center justify-center rounded-full border-2 border-ink bg-surface-container-lowest text-on-surface shadow-soft transition active:scale-90 aria-pressed:bg-secondary aria-pressed:text-on-secondary"
     >
       <Icon name="material-symbols:local-fire-department-outline" class="size-6 group-aria-pressed/fav:hidden" aria-hidden="true" />
       <Icon name="material-symbols:local-fire-department" class="hidden size-6 group-aria-pressed/fav:block" aria-hidden="true" />
@@ -88,12 +88,12 @@ const searchText = [
   </div>
 
   <div class="flex flex-col gap-2.5 p-4">
-    <h3 class="text-headline-sm font-extrabold leading-tight">
+    <h3 class="text-2xl leading-tight">
       {/* The ::after stretches this link over the whole card */}
       <a href={`/recipes/${slug}/`} class="after:absolute after:inset-0 after:z-10">{entry.title}</a>
     </h3>
-    <p class="line-clamp-2 text-label-md font-normal leading-relaxed text-on-surface-variant">{entry.summary}</p>
-    <div class="flex items-center justify-between pt-1 text-label-md text-on-surface-variant">
+    <p class="line-clamp-2 text-label-lg font-normal leading-relaxed text-on-surface-variant">{entry.summary}</p>
+    <div class="flex items-center justify-between border-t-2 border-dashed border-ink/40 pt-3 text-label-md text-on-surface">
       <div class="flex items-center gap-3">
         <span class="flex items-center gap-1">
           <Icon name="material-symbols:timer-outline" class="size-[18px] text-primary" aria-hidden="true" />
@@ -101,7 +101,7 @@ const searchText = [
         </span>
         <span class="flex items-center gap-1">
           <Icon name="material-symbols:bakery-dining-outline" class="size-[18px] text-tertiary" aria-hidden="true" />
-          {entry.servings} יח׳
+          {entry.servings} מנות
         </span>
       </div>
       <Button size="sm" variant="primary" class="pointer-events-none" tabindex="-1" aria-hidden="true">

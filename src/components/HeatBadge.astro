@@ -12,7 +12,7 @@ const heat = heatInfo[difficulty] ?? heatInfo.easy;
 ---
 
 <span
-  class:list={['inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-label-sm shadow-soft', heat.classes, className]}
+  class:list={['inline-flex items-center gap-1 rounded-md border-2 border-ink px-2.5 py-1 text-label-sm', heat.classes, className]}
 >
   <span>{heat.name}</span>
   <HeatFlames level={heat.level} class="size-3" />

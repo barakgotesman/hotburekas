@@ -7,7 +7,7 @@ interface Props {
   recipes: RecipeItem[];
   emptyText?: string;
 }
-const { recipes, emptyText = 'עדיין אין כאן מתכונים. המגש הבא בדרך!' } = Astro.props;
+const { recipes, emptyText = 'עדיין אין כאן מתכונים.' } = Astro.props;
 ---
 
 {
@@ -18,6 +18,6 @@ const { recipes, emptyText = 'עדיין אין כאן מתכונים. המגש 
       ))}
     </div>
   ) : (
-    <p class="rounded-2xl bg-surface-container p-6 text-center text-on-surface-variant">{emptyText}</p>
+    <p class="rounded-2xl border-2 border-dashed border-ink bg-surface-container-low p-6 text-center text-on-surface-variant">{emptyText}</p>
   )
 }

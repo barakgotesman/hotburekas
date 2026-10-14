@@ -15,7 +15,7 @@ export const authors = collection({
     }),
     role: fields.text({
       label: 'Role',
-      description: 'A short title shown next to the name, e.g. "אופה ראשי" or "סבתא של כולנו".',
+      description: 'A short title shown next to the name, e.g. "עורך המתכונים" or "סבתא של כולנו".',
     }),
     bio: fields.text({
       label: 'Short bio',

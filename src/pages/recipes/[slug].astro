@@ -33,9 +33,9 @@ const shareImage = cover ? (await getImage({ src: cover, width: 1200, height: 63
 const heat = heatInfo[entry.difficulty] ?? heatInfo.easy;
 
 const tiles = [
-  { label: 'מד חום וקושי', value: heat.name, flames: heat.level, icon: 'material-symbols:local-fire-department', tone: 'bg-secondary-container text-on-secondary-container' },
+  { label: 'רמת קושי', value: heat.name, flames: heat.level, icon: 'material-symbols:local-fire-department', tone: 'bg-secondary-container text-on-secondary-container' },
   { label: 'כשרות', value: kashrutLabels[entry.kashrut], icon: 'material-symbols:workspace-premium', tone: 'bg-tertiary-container text-on-tertiary-container' },
-  { label: 'זמן אפייה', value: formatMinutes(entry.cookMinutes), icon: 'material-symbols:timer-outline', tone: 'bg-primary-container text-on-primary-container' },
+  { label: 'זמן בישול', value: formatMinutes(entry.cookMinutes), icon: 'material-symbols:timer-outline', tone: 'bg-primary-container text-on-primary-container' },
   { label: 'זמן הכנה', value: formatMinutes(entry.prepMinutes), icon: 'material-symbols:countertops-outline', tone: 'bg-surface-container-highest text-on-surface' },
 ];
 
@@ -51,7 +51,7 @@ const jsonLd = {
   prepTime: isoDuration(entry.prepMinutes),
   cookTime: isoDuration(entry.cookMinutes),
   totalTime: isoDuration(entry.prepMinutes + entry.cookMinutes),
-  recipeYield: `${entry.servings} יחידות`,
+  recipeYield: `${entry.servings} מנות`,
   recipeCategory: category?.name,
   keywords: entry.tags.map((t) => tagLabels[t]).join(', ') || undefined,
   recipeIngredient: entry.ingredients.map((i) =>
@@ -60,7 +60,7 @@ const jsonLd = {
 };
 
 const actionBtn =
-  'flex size-11 items-center justify-center rounded-xl bg-surface-container-lowest text-on-surface shadow-soft transition active:scale-95';
+  'flex size-11 items-center justify-center rounded-xl bg-surface-container-lowest text-on-surface border-2 border-ink shadow-soft transition active:scale-95';
 ---
 
 <BaseLayout
@@ -77,13 +77,13 @@ const actionBtn =
 
     {/* Title + cover: stacked on mobile, side by side on desktop */}
     <div class="space-y-5 lg:grid lg:grid-cols-2 lg:items-center lg:gap-8 lg:space-y-0">
-      <div class="space-y-3 rounded-2xl bg-surface-container-low p-4 shadow-card lg:p-8">
+      <div class="space-y-3 rounded-2xl bg-surface-container-low p-4 border-2 border-ink shadow-card lg:p-8">
         <div class="flex flex-wrap items-center gap-2">
           {
             category && (
               <a
                 href={`/categories/${entry.category}/`}
-                class="inline-flex min-h-8 items-center rounded-full bg-secondary-fixed px-3 text-label-sm text-on-secondary-fixed"
+                class="inline-flex min-h-8 items-center rounded-full border-2 border-ink bg-secondary-fixed px-3 text-label-sm text-on-secondary-fixed"
               >
                 <Icon name={category.icon} class="size-4" aria-hidden="true" />
                 {category.name}
@@ -92,7 +92,7 @@ const actionBtn =
           }
           <KashrutBadge kashrut={entry.kashrut} />
         </div>
-        <h1 class="text-headline-xl">{entry.title}</h1>
+        <h1 class="text-4xl leading-tight lg:text-6xl">{entry.title}</h1>
         <p class="text-on-surface-variant">{entry.summary}</p>
         {
           author && (
@@ -123,7 +123,7 @@ const actionBtn =
         </div>
       </div>
 
-      <div class="relative overflow-hidden rounded-2xl bg-surface-container-high shadow-card">
+      <div class="relative overflow-hidden rounded-2xl border-2 border-ink bg-surface-container-high shadow-card">
         {
           cover && (
             <Picture
@@ -141,7 +141,7 @@ const actionBtn =
         <div class="absolute inset-0 bg-gradient-to-t from-on-surface/70 via-transparent to-black/10"></div>
         <Sticker tone="crust" class="absolute bottom-3 start-3 -rotate-1 !px-3.5 !py-1.5">
           <Icon name="material-symbols:verified" class="size-[18px]" aria-hidden="true" />
-          {entry.servings} יח׳ במגש
+          {entry.servings} מנות
         </Sticker>
       </div>
     </div>
@@ -150,7 +150,7 @@ const actionBtn =
     <ul class="grid grid-cols-2 gap-2 lg:grid-cols-4">
       {
         tiles.map((t) => (
-          <li class="flex items-center gap-2 rounded-xl bg-surface-container p-2.5 shadow-soft">
+          <li class="flex items-center gap-2 rounded-xl border-2 border-ink bg-surface-container-lowest p-2.5 shadow-soft">
             <span class:list={['flex size-9 shrink-0 items-center justify-center rounded-lg', t.tone]}>
               <Icon name={t.icon} class="size-5" aria-hidden="true" />
             </span>
@@ -172,7 +172,7 @@ const actionBtn =
       data-cook-toggle
       aria-pressed="false"
       data-print-hide
-      class="group flex w-full items-center justify-between rounded-2xl bg-primary-container p-4 text-start text-on-primary-container shadow-card transition hover:bg-secondary-container active:scale-[0.98] aria-pressed:bg-secondary aria-pressed:text-on-secondary"
+      class="group flex w-full items-center justify-between rounded-2xl bg-primary-container p-4 text-start text-on-primary-container border-2 border-ink shadow-card transition hover:bg-secondary-container active:scale-[0.98] aria-pressed:bg-secondary aria-pressed:text-on-secondary"
     >
       <span class="flex items-center gap-3">
         <span class="flex size-12 items-center justify-center rounded-xl bg-surface-container-lowest text-primary">
@@ -181,7 +181,7 @@ const actionBtn =
         <span>
           <span class="block text-label-lg group-aria-pressed:hidden">כניסה למצב בישול</span>
           <span class="hidden text-label-lg group-aria-pressed:block">יציאה ממצב בישול</span>
-          <span class="block text-label-md font-normal opacity-90">טקסט גדול והמסך נשאר דלוק בזמן האפייה</span>
+          <span class="block text-label-md font-normal opacity-90">טקסט גדול והמסך נשאר דלוק בזמן הבישול</span>
         </span>
       </span>
       <Icon name="material-symbols:chevron-left" class="size-6" aria-hidden="true" />
@@ -193,25 +193,25 @@ const actionBtn =
         aria-labelledby="ingredients-heading"
         data-servings-root
         data-servings-base={entry.servings}
-        class="space-y-4 rounded-2xl bg-surface-container-low p-4 shadow-card lg:sticky lg:top-24"
+        class="space-y-4 rounded-2xl bg-surface-container-low p-4 border-2 border-ink shadow-card lg:sticky lg:top-24"
       >
         <div class="flex items-center justify-between gap-2">
-          <h2 id="ingredients-heading" class="flex items-center gap-2 text-headline-sm">
+          <h2 id="ingredients-heading" class="flex items-center gap-2 text-2xl">
             <Icon name="material-symbols:shopping-basket-outline" class="size-6 text-secondary" aria-hidden="true" />
-            מצרכים למגש לוהט
+            מצרכים
           </h2>
-          <div data-servings-stepper hidden class="flex items-center rounded-xl bg-surface-container p-1 shadow-soft" data-print-hide>
-            <button type="button" data-servings-step="-1" aria-label="פחות יחידות" class="flex size-9 items-center justify-center rounded-lg bg-surface-container-lowest text-lg font-bold active:bg-primary-container">−</button>
-            <span data-servings-value aria-live="polite" class="min-w-14 px-2 text-center text-label-md">{entry.servings} יח׳</span>
-            <button type="button" data-servings-step="1" aria-label="יותר יחידות" class="flex size-9 items-center justify-center rounded-lg bg-surface-container-lowest text-lg font-bold active:bg-primary-container">+</button>
+          <div data-servings-stepper hidden class="flex items-center rounded-xl border-2 border-ink bg-surface-container-lowest p-1" data-print-hide>
+            <button type="button" data-servings-step="-1" aria-label="פחות מנות" class="flex size-9 items-center justify-center rounded-lg bg-surface-container-lowest text-lg font-bold active:bg-primary-container">−</button>
+            <span data-servings-value aria-live="polite" class="min-w-14 px-2 text-center text-label-md">{entry.servings} מנות</span>
+            <button type="button" data-servings-step="1" aria-label="יותר מנות" class="flex size-9 items-center justify-center rounded-lg bg-surface-container-lowest text-lg font-bold active:bg-primary-container">+</button>
           </div>
         </div>
-        <p class="text-label-md text-on-surface-variant" data-print-hide>סמנו את המצרכים שכבר הנחתם על השיש:</p>
+        <p class="text-label-md text-on-surface-variant" data-print-hide>סמנו את המצרכים שכבר הכנתם:</p>
         <IngredientList ingredients={entry.ingredients} slug={slug} />
       </section>
 
       <section aria-labelledby="steps-heading" class="space-y-4">
-        <h2 id="steps-heading" class="flex items-center gap-2 px-1 text-headline-sm">
+        <h2 id="steps-heading" class="flex items-center gap-2 px-1 text-2xl">
           <Icon name="material-symbols:skillet-outline" class="size-6 text-primary" aria-hidden="true" />
           אופן ההכנה צעד אחר צעד
         </h2>
@@ -229,7 +229,7 @@ const actionBtn =
             <ul class="flex flex-wrap gap-2 pt-2" data-print-hide>
               {entry.tags.map((tag) => (
                 <li>
-                  <a href={`/tags/${tag}/`} class="inline-flex min-h-9 items-center rounded-full bg-surface-container px-3 text-label-md">
+                  <a href={`/tags/${tag}/`} class="inline-flex min-h-9 items-center rounded-full border-2 border-ink bg-surface-container-lowest px-3 text-label-md">
                     #{tagLabels[tag]}
                   </a>
                 </li>

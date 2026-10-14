@@ -78,7 +78,7 @@ function render(s: FilterState) {
     card.hidden = !show;
     if (show) visible++;
   }
-  if (countEl) countEl.textContent = `${visible} מתכונים פריכים`;
+  if (countEl) countEl.textContent = `${visible} מתכונים`;
   if (emptyEl) emptyEl.hidden = visible > 0;
 
   document.querySelectorAll<HTMLElement>('[data-filter]').forEach((chip) => {

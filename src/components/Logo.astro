@@ -13,8 +13,8 @@ const { siteTitle, tagline, markClass = 'size-11' } = Astro.props;
 
 <span class="flex items-center gap-2">
   <LogoMark class={markClass} />
-  <span class="flex flex-col leading-tight">
-    <span class="text-headline-sm font-black">{siteTitle}</span>
+  <span class="flex flex-col gap-0.5">
+    <span class="font-display text-2xl leading-none">{siteTitle}</span>
     {tagline && <span class="text-label-sm text-secondary">{tagline}</span>}
   </span>
 </span>

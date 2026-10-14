@@ -32,7 +32,7 @@ const aboutParagraphs = (author.about ?? '').split(/\n\s*\n/).map((p) => p.trim(
   innerTitle={author.name}
 >
   <Container class="space-y-8">
-    <header class="overflow-hidden rounded-2xl bg-surface-container-low shadow-card">
+    <header class="overflow-hidden rounded-2xl bg-surface-container-low border-2 border-ink shadow-card">
       {/* Optional wide banner; the avatar overlaps its bottom edge */}
       {
         banner && (
@@ -69,7 +69,7 @@ const aboutParagraphs = (author.about ?? '').split(/\n\s*\n/).map((p) => p.trim(
           {author.role && (
             <p class="inline-flex rounded-full bg-secondary-fixed px-3 py-0.5 text-label-sm text-on-secondary-fixed">{author.role}</p>
           )}
-          <h1 class="text-headline-xl">{author.name}</h1>
+          <h1 class="text-4xl leading-tight lg:text-6xl">{author.name}</h1>
           {author.bio && <p class="text-on-surface-variant">{author.bio}</p>}
           {
             author.instagram && (
@@ -87,12 +87,12 @@ const aboutParagraphs = (author.about ?? '').split(/\n\s*\n/).map((p) => p.trim(
       (author.quote || aboutParagraphs.length > 0) && (
         <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:items-start">
           <div class="space-y-3 rounded-2xl bg-surface-container p-5 lg:p-8">
-            <h2 class="text-headline-sm">קצת עליו</h2>
+            <h2 class="text-2xl">קצת עליו</h2>
             {aboutParagraphs.map((p) => <p class="leading-relaxed">{p}</p>)}
           </div>
           {
             author.quote && (
-              <blockquote class="flex rotate-[-0.8deg] items-start gap-3 rounded-2xl bg-primary-fixed p-5 text-on-primary-fixed-variant shadow-card">
+              <blockquote class="flex rotate-[-0.8deg] items-start gap-3 rounded-2xl bg-primary-fixed p-5 text-on-primary-fixed-variant border-2 border-ink shadow-card">
                 <Icon name="material-symbols:format-quote" class="size-8 shrink-0 text-secondary" aria-hidden="true" />
                 <p class="text-headline-sm font-medium">{author.quote}</p>
               </blockquote>
@@ -103,7 +103,7 @@ const aboutParagraphs = (author.about ?? '').split(/\n\s*\n/).map((p) => p.trim(
     }
 
     <section class="space-y-4">
-      <h2 class="text-headline-lg">המתכונים של {author.name}</h2>
+      <h2 class="text-4xl leading-tight">המתכונים של {author.name}</h2>
       <RecipeGrid recipes={recipes} />
     </section>
   </Container>

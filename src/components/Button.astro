@@ -13,14 +13,14 @@ const { href, variant = 'primary', size = 'md', class: className = '', type = 'b
 
 const variants = {
   primary: 'bg-primary text-on-primary hover:bg-on-primary-fixed-variant',
-  crust: 'bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary',
-  secondary: 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest',
-  heat: 'bg-secondary text-on-secondary hover:bg-on-secondary-container',
+  crust: 'bg-primary-container text-on-primary-container hover:bg-secondary-container',
+  secondary: 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-high',
+  heat: 'bg-secondary text-on-secondary hover:bg-secondary-container hover:text-on-secondary-container',
 };
 // min-h-11 keeps the 44px touch target on the md size.
 const sizes = { md: 'min-h-11 px-4 py-3 text-label-lg', sm: 'min-h-9 px-3.5 py-1.5 text-label-sm' };
 const classes = [
-  'inline-flex items-center justify-center gap-2 rounded-xl shadow-soft transition active:scale-[0.98]',
+  'inline-flex items-center justify-center gap-2 rounded-xl border-2 border-ink shadow-[-3px_3px_0_0_var(--color-ink)] transition hover:shadow-[-5px_5px_0_0_var(--color-ink)] active:translate-x-[-3px] active:translate-y-[3px] active:shadow-none',
   variants[variant],
   sizes[size],
   className,

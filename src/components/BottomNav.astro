@@ -3,12 +3,12 @@ import { Icon } from 'astro-icon/components';
 
 const path = Astro.url.pathname;
 
-// "מצב אפייה" opens the last viewed recipe in cook mode (the href is upgraded by the script below).
+// "מצב בישול" opens the last viewed recipe in cook mode (the href is upgraded by the script below).
 const tabs = [
   { href: '/', label: 'ראשי', icon: 'material-symbols:bakery-dining' },
   { href: '/recipes/', label: 'מתכונים', icon: 'material-symbols:menu-book' },
   { href: '/favorites/', label: 'מועדפים', icon: 'material-symbols:local-fire-department' },
-  { href: '/recipes/', label: 'מצב אפייה', icon: 'material-symbols:timer', cook: true },
+  { href: '/recipes/', label: 'מצב בישול', icon: 'material-symbols:timer', cook: true },
 ];
 /** Home is active only on "/", other tabs match by prefix. The cook tab is never "active". */
 const isActive = (tab: (typeof tabs)[number]) =>
@@ -17,7 +17,7 @@ const isActive = (tab: (typeof tabs)[number]) =>
 
 <nav
   aria-label="ניווט תחתון"
-  class="fixed inset-x-0 bottom-0 z-50 bg-surface/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_24px_rgb(42_23_15/0.08)] backdrop-blur-xl lg:hidden"
+  class="fixed inset-x-0 bottom-0 z-50 border-t-2 border-ink bg-inverse-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
   data-print-hide
 >
   <div class="flex h-20 items-center justify-around px-2">
@@ -27,7 +27,7 @@ const isActive = (tab: (typeof tabs)[number]) =>
           href={tab.href}
           data-cook-link={tab.cook ? '' : undefined}
           aria-current={isActive(tab) ? 'page' : undefined}
-          class="flex h-14 min-w-[72px] flex-col items-center justify-center gap-1 rounded-xl px-2 text-on-surface-variant transition aria-[current=page]:bg-primary-container aria-[current=page]:text-on-primary-container aria-[current=page]:shadow-[0_2px_8px_rgb(233_162_59/0.35)]"
+          class="flex h-14 min-w-[72px] flex-col items-center justify-center gap-1 rounded-xl border-2 border-transparent px-2 text-inverse-on-surface transition aria-[current=page]:border-surface aria-[current=page]:bg-primary-container aria-[current=page]:text-on-primary-container aria-[current=page]:shadow-[-3px_3px_0_0_var(--color-secondary)]"
         >
           <Icon name={tab.icon} class="size-6" aria-hidden="true" />
           <span class="text-label-sm">{tab.label}</span>

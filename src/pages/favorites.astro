@@ -12,20 +12,20 @@ const recipes = await getPublishedRecipes();
 
 <BaseLayout title="המועדפים שלי" description="המתכונים ששמרתם." backHref="/" innerTitle="המועדפים שלי">
   <Container class="space-y-6">
-    <h1 class="text-headline-xl">המועדפים שלי</h1>
+    <h1 class="text-4xl leading-tight lg:text-6xl">המועדפים שלי</h1>
     <p class="text-on-surface-variant">המתכונים נשמרים בדפדפן הזה בלבד.</p>
 
     <div id="fav-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {recipes.map((recipe, i) => <div data-fav-item={recipe.slug} hidden><RecipeCard recipe={recipe} index={i} /></div>)}
     </div>
 
-    <div id="fav-empty" hidden class="rounded-2xl bg-surface-container p-6 text-center">
+    <div id="fav-empty" hidden class="rounded-2xl border-2 border-dashed border-ink bg-surface-container-low p-6 text-center">
       <Icon name="material-symbols:local-fire-department-outline" class="mx-auto size-10 text-secondary" aria-hidden="true" />
-      <p class="mt-2 text-headline-sm">עוד לא שמרתם שום מגש</p>
-      <p class="mt-1 text-on-surface-variant">לחצו על הלהבה בכרטיס מתכון כדי לשמור אותו כאן.</p>
+      <p class="mt-2 text-headline-sm">עוד לא שמרתם מתכונים</p>
+      <p class="mt-1 text-on-surface-variant">לחצו על סמל השמירה בכרטיס מתכון כדי לשמור אותו כאן.</p>
       <Button href="/recipes/" variant="crust" class="mt-4">לכל המתכונים</Button>
     </div>
-    <noscript><p class="rounded-2xl bg-surface-container p-6 text-center">המועדפים דורשים JavaScript.</p></noscript>
+    <noscript><p class="rounded-2xl border-2 border-dashed border-ink bg-surface-container-low p-6 text-center">המועדפים דורשים JavaScript.</p></noscript>
   </Container>
 </BaseLayout>
 

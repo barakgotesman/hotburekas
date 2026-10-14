@@ -6,11 +6,11 @@ export const settings = singleton({
   path: 'src/content/settings',
   schema: {
     siteTitle: fields.text({ label: 'Site title', defaultValue: 'בורקס לוהט' }),
-    tagline: fields.text({ label: 'Tagline', description: 'Shown under the logo.', defaultValue: 'חם, פריך ולא שפוי' }),
-    heroTitle: fields.text({ label: 'Hero title (first line)', defaultValue: 'חם, פריך, נוטף.' }),
-    heroHighlight: fields.text({ label: 'Hero title (highlighted second line)', description: 'Shown in the accent color.', defaultValue: 'ישר מהתנור.' }),
+    tagline: fields.text({ label: 'Tagline', description: 'Shown under the logo.', defaultValue: 'מתכוני בורקס ביתיים, צעד אחר צעד' }),
+    heroTitle: fields.text({ label: 'Hero title (first line)', defaultValue: 'מתכוני בורקס ביתיים,' }),
+    heroHighlight: fields.text({ label: 'Hero title (highlighted second line)', description: 'Shown in the accent color.', defaultValue: 'צעד אחר צעד.' }),
     heroText: fields.text({ label: 'Hero text', multiline: true }),
-    heroStamp: fields.text({ label: 'Hero corner sticker', description: 'Small tilted label on the hero card. Leave empty to hide.', defaultValue: 'הלהיט של השבוע' }),
+    heroStamp: fields.text({ label: 'Hero corner sticker', description: 'Small tilted label on the hero card. Leave empty to hide.', defaultValue: 'מתכון מומלץ' }),
     heroImage: fields.image({
       label: 'Hero image',
       description: 'Landscape (4:3 works best), at least 1200px wide.',
@@ -25,6 +25,6 @@ export const settings = singleton({
       description: 'Pick a published recipe (not a draft). Falls back to the newest recipe if empty.',
       collection: 'recipes',
     }),
-    footerText: fields.text({ label: 'Footer text', defaultValue: 'נאפה באהבה, חמאה וקצת שומשום שנשפך' }),
+    footerText: fields.text({ label: 'Footer text', defaultValue: 'מתכונים ביתיים שנכתבו באהבה' }),
   },
 });

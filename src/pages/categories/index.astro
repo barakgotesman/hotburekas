@@ -12,7 +12,7 @@ const countIn = (slug: string) => recipes.filter((r) => r.entry.category === slu
 
 <BaseLayout title="קטגוריות" description="כל סוגי הבורקס לפי קטגוריות." backHref="/" innerTitle="קטגוריות">
   <Container class="space-y-6">
-    <h1 class="text-headline-xl">בחרו סגנון למגש</h1>
+    <h1 class="text-4xl leading-tight lg:text-6xl">בחרו קטגוריה</h1>
     <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {
         categories.map((cat, i) => (
@@ -20,7 +20,7 @@ const countIn = (slug: string) => recipes.filter((r) => r.entry.category === slu
             <TiltCard index={i} class="bg-surface-container-low p-5">
               <a href={`/categories/${cat.slug}/`} class="block after:absolute after:inset-0">
                 <Icon name={cat.entry.icon} class="size-10 text-secondary" aria-hidden="true" />
-                <h2 class="mt-2 text-headline-sm">{cat.entry.name}</h2>
+                <h2 class="mt-2 text-2xl">{cat.entry.name}</h2>
                 <p class="mt-1 text-on-surface-variant">{cat.entry.description}</p>
                 <p class="mt-3 text-label-md font-bold text-primary">{countIn(cat.slug)} מתכונים</p>
               </a>

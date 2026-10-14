@@ -1,4 +1,4 @@
-// Small recipe-page extras: remember the last recipe (for the "מצב אפייה" tab), share and print buttons.
+// Small recipe-page extras: remember the last recipe (for the "מצב בישול" tab), share and print buttons.
 
 try {
   const slug = document.body.querySelector<HTMLElement>('[data-recipe-slug]')?.dataset.recipeSlug;

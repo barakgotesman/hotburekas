@@ -20,9 +20,9 @@ const { category, recipes } = Astro.props;
 
 <BaseLayout title={category.name} description={category.description} backHref="/categories/" innerTitle={category.name}>
   <Container class="space-y-6">
-    <header class="rounded-2xl bg-surface-container-low p-5 shadow-card lg:p-8">
+    <header class="rounded-2xl bg-surface-container-low p-5 border-2 border-ink shadow-card lg:p-8">
       <Icon name={category.icon} class="size-12 text-secondary" aria-hidden="true" />
-      <h1 class="mt-2 text-headline-xl">{category.name}</h1>
+      <h1 class="mt-2 text-4xl leading-tight lg:text-6xl">{category.name}</h1>
       <p class="mt-1 text-on-surface-variant">{category.description}</p>
     </header>
     <RecipeGrid recipes={recipes} />

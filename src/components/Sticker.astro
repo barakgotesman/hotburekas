@@ -8,7 +8,7 @@ interface Props {
 const { tone = 'paper', rotate = 'left', class: className = '' } = Astro.props;
 
 const tones = {
-  paper: 'bg-surface-container-highest text-on-surface-variant',
+  paper: 'bg-surface-container-lowest text-on-surface',
   heat: 'bg-secondary text-on-secondary',
   crust: 'bg-primary-container text-on-primary-container',
 };
@@ -17,7 +17,7 @@ const rotations = { left: '-rotate-3', right: 'rotate-2' };
 
 <span
   class:list={[
-    'inline-flex items-center gap-1 rounded px-3 py-1 text-label-sm shadow-soft',
+    'inline-flex items-center gap-1 rounded-sm border-2 border-ink px-3 py-1 text-label-sm shadow-soft',
     tones[tone],
     rotations[rotate],
     className,

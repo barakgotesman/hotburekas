@@ -62,11 +62,11 @@ export const unitLabels = toMap(unitOptions);
 export const groupLabels = toMap(groupOptions);
 export const tagLabels = toMap(tagOptions);
 
-/** Difficulty is shown as a "heat meter" (מד חום): `level` flame icons (see HeatFlames.astro). */
+/** Difficulty is shown as `level` flame icons (see HeatFlames.astro). */
 export const heatInfo: Record<string, { name: string; level: 1 | 2 | 3; classes: string }> = {
-  easy: { name: 'פושר', level: 1, classes: 'bg-primary-container text-on-primary-container' },
-  medium: { name: 'חם', level: 2, classes: 'bg-secondary-container text-on-secondary-container' },
-  hard: { name: 'לוהט', level: 3, classes: 'bg-secondary text-on-secondary' },
+  easy: { name: 'קל', level: 1, classes: 'bg-primary-container text-on-primary-container' },
+  medium: { name: 'בינוני', level: 2, classes: 'bg-secondary-container text-on-secondary-container' },
+  hard: { name: 'קשה', level: 3, classes: 'bg-secondary text-on-secondary' },
 };
 
 export const kashrutInfo: Record<string, { classes: string }> = {

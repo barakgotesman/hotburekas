@@ -11,12 +11,12 @@ const recipes = await getPublishedRecipes();
 
 // Pressed chips use aria-pressed so one class list covers both states.
 const chip =
-  'shrink-0 rounded-full bg-surface-container px-3.5 py-2 text-label-md text-on-surface shadow-soft transition active:scale-95 aria-pressed:bg-primary-container aria-pressed:text-on-primary-container';
+  'shrink-0 rounded-full border-2 border-ink bg-surface-container-lowest px-3.5 py-2 text-label-md text-on-surface shadow-soft transition active:translate-x-[-2px] active:translate-y-[2px] active:shadow-none aria-pressed:bg-primary-container aria-pressed:text-on-primary-container';
 ---
 
 <BaseLayout
   title="כל המתכונים"
-  description="כל מתכוני הבורקס: משולשים, שבלולים, סו בורק ועוד. סננו לפי כשרות, מד חום וזמן."
+  description="כל מתכוני הבורקס: משולשים, שבלולים, סו בורק ועוד. סננו לפי כשרות, רמת קושי וזמן."
   backHref="/"
   innerTitle="כל המתכונים"
 >
@@ -24,7 +24,7 @@ const chip =
   <section class="sticky top-16 z-30 bg-surface/95 pb-3 pt-1 backdrop-blur-md lg:top-20" data-print-hide>
     <Container>
       <h1 class="sr-only">כל המתכונים</h1>
-      <div class="relative flex items-center rounded-xl bg-surface-container-low shadow-card focus-within:bg-surface-container-lowest">
+      <div class="relative flex items-center rounded-xl bg-surface-container-low border-2 border-ink shadow-card focus-within:bg-surface-container-lowest">
         <Icon name="material-symbols:search" class="pointer-events-none absolute start-3.5 size-6 text-primary" aria-hidden="true" />
         <input
           id="recipe-search"
@@ -44,7 +44,7 @@ const chip =
             </button>
           ))
         }
-        <span class="shrink-0 ps-2 text-label-sm font-bold text-on-surface-variant">מד חום:</span>
+        <span class="shrink-0 ps-2 text-label-sm font-bold text-on-surface-variant">רמת קושי:</span>
         {
           difficultyOptions.map((o) => (
             <button type="button" data-filter="heat" data-value={o.value} aria-pressed="false" class={`${chip} inline-flex items-center gap-1`}>
@@ -65,13 +65,13 @@ const chip =
     <div class="flex items-center justify-between gap-3 px-1 pb-3">
       <p class="flex items-center gap-1.5 text-headline-sm font-black">
         <span class="size-2 animate-pulse rounded-full bg-secondary" aria-hidden="true"></span>
-        <span id="recipe-count" aria-live="polite">{recipes.length} מתכונים פריכים</span>
+        <span id="recipe-count" aria-live="polite">{recipes.length} מתכונים</span>
       </p>
       <label class="flex items-center gap-1.5 text-label-md">
         <span class="sr-only">מיון</span>
-        <select id="recipe-sort" class="min-h-11 rounded-lg bg-surface-container-high px-3 text-label-md">
+        <select id="recipe-sort" class="min-h-11 rounded-lg border-2 border-ink bg-surface-container-lowest px-3 text-label-md shadow-soft">
           <option value="new">הכי חדש</option>
-          <option value="time">הכי מהיר בתנור</option>
+          <option value="time">הכי מהיר להכנה</option>
         </select>
       </label>
     </div>
@@ -80,8 +80,8 @@ const chip =
       {recipes.map((recipe, i) => <RecipeCard recipe={recipe} index={i} eager={i < 2} />)}
     </div>
 
-    <div id="recipe-empty" hidden class="mt-10 rounded-2xl bg-surface-container p-6 text-center">
-      <p class="text-headline-sm">הבורקס הזה עוד לא יצא מהתנור</p>
+    <div id="recipe-empty" hidden class="mt-10 rounded-2xl border-2 border-dashed border-ink bg-surface-container-low p-6 text-center">
+      <p class="text-headline-sm">אין תוצאות</p>
       <p class="mt-1 text-on-surface-variant">לא נמצאו מתכונים. נסו חיפוש אחר או נקו את הסינון.</p>
       <button
         id="recipe-clear"
