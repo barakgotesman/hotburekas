@@ -65,10 +65,10 @@ describe('POST /api/submit-recipe', () => {
 
     expect(openPr).toHaveBeenCalledOnce();
     const [, opts] = openPr.mock.calls[0];
-    expect(opts.branch).toMatch(/^submission\/submission-[a-z0-9]+$/);
+    expect(opts.branch).toMatch(/^content\/submission-[a-z0-9]+$/);
     expect(opts.title).toBe('Recipe submission: בורקס גבינה');
     expect(opts.files).toHaveLength(2);
-    const slug = opts.branch.replace('submission/', '');
+    const slug = opts.branch.replace('content/', '');
     expect(opts.files[0].path).toBe(`src/content/recipes/${slug}.mdoc`);
     expect(opts.files[0].content).toContain('draft: true');
     expect(opts.files[1].path).toBe(`src/assets/images/recipes/${slug}/cover.jpg`);

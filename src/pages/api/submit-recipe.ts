@@ -47,7 +47,9 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     await openSubmissionPullRequest(cfg, {
-      branch: `submission/${slug}`,
+      // Keystatic's branch picker only lists branches with the `branchPrefix` from keystatic.config.ts
+      // (`content/`), so submissions must use that prefix to be reviewable in the admin.
+      branch: `content/${slug}`,
       title: `Recipe submission: ${s.title}`,
       files: [
         { path: `src/content/recipes/${slug}.mdoc`, content: buildRecipeFile(s, slug, today) },
@@ -58,7 +60,7 @@ export const POST: APIRoute = async ({ request }) => {
         '',
         `- Submitted by: ${submitter}`,
         `- The recipe is a draft (\`draft: true\`), so it stays hidden after merging until you publish it.`,
-        `- To review: open /keystatic, switch to branch \`submission/${slug}\`, fix the text, rename the slug if you like, set the author and alt text, then merge.`,
+        `- To review: open /keystatic, pick branch \`content/${slug}\` in the branch dropdown, fix the text, rename the slug if you like, set the author and alt text, then merge.`,
       ].join('\n'),
     });
   } catch (e) {
