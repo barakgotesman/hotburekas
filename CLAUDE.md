@@ -230,3 +230,21 @@ The visual design is defined in a **Google Stitch** project and must be followed
   - **Feeling and layout come from the Stitch project.** Do not invent a different look.
   - **Colors come from `design.md` / `src/styles/global.css` `@theme` tokens, which override Stitch colors.** The owner may change the palette, so always use semantic tokens (`bg-primary-container`, `text-secondary`, ...) and never raw hex.
   - The raw Stitch HTML is a reference, not code to paste. Port it to Astro components with Tailwind v4, logical (RTL) utilities, self-hosted fonts, and no CDN scripts, following the rules above in this file.
+
+## TODO: go live (deploy checklist)
+
+Do these in order. Tick a box (`[x]`) when done. Details are in `README.md`.
+
+- [ ] **GitHub repo**: create `burekas-lohet` on GitHub, add it as `origin`, push `main`.
+- [ ] **Owner name**: replace `YOUR_GITHUB_USER` in `keystatic.config.ts` with the real GitHub user/org, commit and push.
+- [ ] **Vercel project**: import the repo into Vercel (Hobby plan, framework preset Astro, branch `main`). Confirm the first build passes.
+- [ ] **Production domain**: check the real URL. If it isn't `burekas-lohet.vercel.app`, update `site` in `astro.config.mjs`, the sitemap line in `public/robots.txt`, and the callback URL below.
+- [ ] **GitHub App**: create the Keystatic GitHub App (run the dev server in GitHub mode once and follow the setup, or create it by hand). Callback URL: `https://burekas-lohet.vercel.app/api/keystatic/github/oauth/callback`. Install it on the `burekas-lohet` repo only.
+- [ ] **Environment variables** in Vercel Project Settings (never commit them): `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`, `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`. Redeploy after adding them.
+- [ ] **Test the admin on production**: open `/keystatic`, sign in with GitHub, edit one recipe, save. Check that a commit appears on GitHub, Vercel rebuilds, and the change is live.
+- [ ] **Branch workflow**: create a branch from the admin (it gets the `content/` prefix), confirm Vercel builds a preview, merge it with a pull request.
+- [ ] **Branch protection**: on GitHub, protect `main` (require a pull request review) if more than one person edits.
+- [ ] **Replace sample content**: delete or edit the 6 sample recipes, replace the reused Stitch photos with real ones, update authors, categories and site settings (hero, ticker, recipe of the week).
+- [ ] **Check the live site**: test on a phone at 360px and 390px, check `/rss.xml`, `/sitemap-index.xml`, `/robots.txt`, a 404 page, and a recipe's share preview (Open Graph). Optionally add a branded `public/og-default.png`.
+- [ ] **Run Lighthouse (mobile)** on home and a recipe page. Targets: Performance 90+, Accessibility 95+.
+- [ ] **Custom domain** (optional): add it in Vercel, then update `site`, `robots.txt` and the GitHub App callback URL to the new domain. Remember Vercel Hobby is non-commercial only (no ads or affiliate links).
