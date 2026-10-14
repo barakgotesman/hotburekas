@@ -13,7 +13,7 @@ const control =
   'min-h-12 w-full rounded-xl border-2 border-ink bg-surface-container-lowest px-3 py-2.5 text-base placeholder:text-on-surface-variant/70 focus:bg-primary-fixed focus:outline-none';
 const label = 'mb-1 block text-label-lg';
 const hint = 'mt-1 text-label-md font-normal text-on-surface-variant';
-const card = 'space-y-4 rounded-2xl border-2 border-ink bg-surface-container-low p-5 shadow-soft';
+const card = 'grid gap-4 rounded-2xl border-2 border-ink bg-surface-container-low p-5 shadow-soft';
 const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-md text-secondary';
 ---
 
@@ -23,12 +23,14 @@ const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-m
   backHref="/"
   innerTitle="שליחת מתכון"
 >
-  <Container class="mx-auto max-w-2xl space-y-6 pt-6">
+  <Container>
+  <div class="mx-auto max-w-3xl space-y-6 pt-6">
     <header class="space-y-2">
       <h1 class="text-4xl leading-tight lg:text-6xl">שלחו לנו מתכון</h1>
       <p class="text-on-surface-variant">
         מלאו את הפרטים ונבדוק את המתכון לפני הפרסום. מתכון שנשלח לא עולה לאתר אוטומטית.
       </p>
+      <p class="text-label-md font-bold">שדות המסומנים ב-<span class="text-secondary" aria-hidden="true">*</span> הם שדות חובה.</p>
     </header>
 
     <noscript>
@@ -44,31 +46,31 @@ const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-m
       <fieldset class={card}>
         <legend class="font-display text-2xl">על המתכון</legend>
         <div>
-          <label for="f-title" class={label}>שם המתכון</label>
+          <label for="f-title" class={label}>שם המתכון <span class="text-secondary" aria-hidden="true">*</span></label>
           <input id="f-title" name="title" type="text" required maxlength="80" class={control} />
         </div>
         <div>
-          <label for="f-summary" class={label}>תיאור קצר</label>
+          <label for="f-summary" class={label}>תיאור קצר <span class="text-secondary" aria-hidden="true">*</span></label>
           <textarea id="f-summary" name="summary" required minlength="20" maxlength="300" rows="3" class={control}></textarea>
           <p class={hint}>משפט או שניים (20 עד 300 תווים). יוצג בכרטיס המתכון.</p>
         </div>
-        <div>
-          <label for="f-category" class={label}>קטגוריה</label>
-          <select id="f-category" name="category" required class={control}>
-            <option value="">בחרו קטגוריה</option>
-            {categories.map((c) => <option value={c.slug}>{c.entry.name}</option>)}
-          </select>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div class="col-span-2 sm:col-span-1">
+            <label for="f-category" class={label}>קטגוריה <span class="text-secondary" aria-hidden="true">*</span></label>
+            <select id="f-category" name="category" required class={control}>
+              <option value="">בחרו קטגוריה</option>
+              {categories.map((c) => <option value={c.slug}>{c.entry.name}</option>)}
+            </select>
+          </div>
           <div>
-            <label for="f-kashrut" class={label}>כשרות</label>
+            <label for="f-kashrut" class={label}>כשרות <span class="text-secondary" aria-hidden="true">*</span></label>
             <select id="f-kashrut" name="kashrut" required class={control}>
               <option value="">בחרו</option>
               {kashrutOptions.map((o) => <option value={o.value}>{o.label}</option>)}
             </select>
           </div>
           <div>
-            <label for="f-difficulty" class={label}>רמת קושי</label>
+            <label for="f-difficulty" class={label}>רמת קושי <span class="text-secondary" aria-hidden="true">*</span></label>
             <select id="f-difficulty" name="difficulty" required class={control}>
               <option value="">בחרו</option>
               {difficultyOptions.map((o) => <option value={o.value}>{o.label}</option>)}
@@ -77,15 +79,15 @@ const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-m
         </div>
         <div class="grid grid-cols-3 gap-3">
           <div>
-            <label for="f-prep" class={label}>הכנה (דק׳)</label>
+            <label for="f-prep" class={label}>הכנה (דק׳) <span class="text-secondary" aria-hidden="true">*</span></label>
             <input id="f-prep" name="prepMinutes" type="number" inputmode="numeric" min="0" max="600" value="20" required class={control} />
           </div>
           <div>
-            <label for="f-cook" class={label}>בישול (דק׳)</label>
+            <label for="f-cook" class={label}>בישול (דק׳) <span class="text-secondary" aria-hidden="true">*</span></label>
             <input id="f-cook" name="cookMinutes" type="number" inputmode="numeric" min="0" max="600" value="30" required class={control} />
           </div>
           <div>
-            <label for="f-servings" class={label}>מנות</label>
+            <label for="f-servings" class={label}>מנות <span class="text-secondary" aria-hidden="true">*</span></label>
             <input id="f-servings" name="servings" type="number" inputmode="numeric" min="1" max="100" value="8" required class={control} />
           </div>
         </div>
@@ -105,19 +107,20 @@ const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-m
       </fieldset>
 
       <fieldset class={card}>
-        <legend class="font-display text-2xl">מצרכים</legend>
-        <p class={hint}>כמות יכולה להיות מספר, ½ או 1.5. השאירו ריק עבור "לפי הטעם".</p>
+        <legend class="font-display text-2xl">מצרכים <span class="text-secondary" aria-hidden="true">*</span></legend>
+        <p class={hint}>יש להוסיף לפחות מצרך אחד עם שם. כמות יכולה להיות מספר, ½ או 1.5. השאירו ריק עבור "לפי הטעם".</p>
         <ol id="ingredient-list" class="space-y-4"></ol>
-        <Button type="button" variant="secondary" id="add-ingredient" class="w-full">
+        <Button type="button" variant="secondary" id="add-ingredient" class="w-full justify-self-start sm:w-auto">
           <Icon name="material-symbols:add" class="size-5" aria-hidden="true" />
           הוספת מצרך
         </Button>
       </fieldset>
 
       <fieldset class={card}>
-        <legend class="font-display text-2xl">אופן ההכנה</legend>
+        <legend class="font-display text-2xl">אופן ההכנה <span class="text-secondary" aria-hidden="true">*</span></legend>
+        <p class={hint}>יש להוסיף לפחות שלב אחד.</p>
         <ol id="step-list" class="space-y-4"></ol>
-        <Button type="button" variant="secondary" id="add-step" class="w-full">
+        <Button type="button" variant="secondary" id="add-step" class="w-full justify-self-start sm:w-auto">
           <Icon name="material-symbols:add" class="size-5" aria-hidden="true" />
           הוספת שלב
         </Button>
@@ -130,7 +133,7 @@ const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-m
       <fieldset class={card}>
         <legend class="font-display text-2xl">תמונה</legend>
         <div>
-          <label for="f-photo" class={label}>תמונה של המנה</label>
+          <label for="f-photo" class={label}>תמונה של המנה <span class="text-secondary" aria-hidden="true">*</span></label>
           <input
             id="f-photo"
             name="photo"
@@ -161,7 +164,7 @@ const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-m
 
       <div role="status" aria-live="polite" id="submit-status" class="hidden"></div>
 
-      <Button type="submit" variant="heat" id="submit-button" class="w-full">
+      <Button type="submit" variant="heat" id="submit-button" class="w-full sm:w-auto sm:min-w-56">
         <Icon name="material-symbols:send-outline" class="size-5 rtl:-scale-x-100" aria-hidden="true" />
         שליחת המתכון
       </Button>
@@ -169,25 +172,26 @@ const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-m
 
     {/* Row templates cloned by the script; row titles ("מצרך 1") are filled in there. */}
     <template id="ingredient-template">
-      <li class="space-y-3 rounded-xl border-2 border-ink bg-surface-container-lowest p-3">
-        <div class="flex items-center justify-between gap-2">
+      <li class="rounded-xl border-2 border-ink bg-surface-container-lowest p-3">
+        <div class="mb-3 flex items-center justify-between gap-2">
           <p class="text-label-lg" data-row-title></p>
           <button type="button" data-remove class={removeBtn}>
             <Icon name="material-symbols:delete-outline" class="size-5" aria-hidden="true" />
             הסרה
           </button>
         </div>
-        <select name="group" aria-label="קבוצה" class={control}>
-          {groupOptions.map((o) => <option value={o.value} selected={o.value === 'filling'}>{o.label}</option>)}
-        </select>
-        <div class="grid grid-cols-2 gap-3">
-          <input name="amount" type="text" inputmode="decimal" placeholder="כמות" aria-label="כמות" maxlength="20" class={control} />
-          <select name="unit" aria-label="יחידה" class={control}>
+        {/* 2 columns on phones, 8 on larger screens: group + amount + unit on one line, name + note on the next. */}
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-8">
+          <select name="group" aria-label="קבוצה" class={`${control} col-span-2 sm:col-span-3`}>
+            {groupOptions.map((o) => <option value={o.value} selected={o.value === 'filling'}>{o.label}</option>)}
+          </select>
+          <input name="amount" type="text" inputmode="decimal" placeholder="כמות" aria-label="כמות" maxlength="20" class={`${control} sm:col-span-2`} />
+          <select name="unit" aria-label="יחידה" class={`${control} sm:col-span-3`}>
             {unitOptions.map((o) => <option value={o.value}>{o.label}</option>)}
           </select>
+          <input name="name" type="text" placeholder="שם המצרך" aria-label="שם המצרך" maxlength="80" class={`${control} col-span-2 sm:col-span-4`} />
+          <input name="note" type="text" placeholder="הערה (למשל: מופשרים)" aria-label="הערה" maxlength="80" class={`${control} col-span-2 sm:col-span-4`} />
         </div>
-        <input name="name" type="text" placeholder="שם המצרך" aria-label="שם המצרך" maxlength="80" class={control} />
-        <input name="note" type="text" placeholder="הערה (למשל: מופשרים)" aria-label="הערה" maxlength="80" class={control} />
       </li>
     </template>
 
@@ -204,6 +208,7 @@ const removeBtn = 'flex min-h-11 items-center gap-1 rounded-lg px-2 text-label-m
         <textarea name="stepText" rows="3" placeholder="מה עושים בשלב הזה" aria-label="תיאור השלב" maxlength="800" class={control}></textarea>
       </li>
     </template>
+  </div>
   </Container>
 </BaseLayout>
 

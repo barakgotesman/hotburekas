@@ -188,7 +188,7 @@ storage: import.meta.env.PROD
   - `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
   - `SUBMISSIONS_GITHUB_TOKEN`, `SUBMISSIONS_GITHUB_REPO` (the `/submit` recipe form opens a draft pull request; see `.env.example`)
 - GitHub App callback URL must include the production domain:
-  `https://burekas-lohet.vercel.app/api/keystatic/github/oauth/callback`
+  `https://hotburekas.vercel.app/api/keystatic/github/oauth/callback`
 - The admin login only works on registered URLs, so use the production domain for editing, not preview deployments.
 - Vercel Hobby is for non-commercial use only. Do not add ads/affiliate links without moving to a paid plan or another host.
 
@@ -245,8 +245,8 @@ Do these in order. Tick a box (`[x]`) when done. Details are in `README.md`.
 - [ ] **GitHub repo**: create `burekas-lohet` on GitHub, add it as `origin`, push `main`.
 - [ ] **Owner name**: replace `YOUR_GITHUB_USER` in `keystatic.config.ts` with the real GitHub user/org, commit and push.
 - [ ] **Vercel project**: import the repo into Vercel (Hobby plan, framework preset Astro, branch `main`). Confirm the first build passes.
-- [ ] **Production domain**: check the real URL. If it isn't `burekas-lohet.vercel.app`, update `site` in `astro.config.mjs`, the sitemap line in `public/robots.txt`, and the callback URL below.
-- [ ] **GitHub App**: create the Keystatic GitHub App (run the dev server in GitHub mode once and follow the setup, or create it by hand). Callback URL: `https://burekas-lohet.vercel.app/api/keystatic/github/oauth/callback`. Install it on the `burekas-lohet` repo only.
+- [ ] **Production domain**: check the real URL. If it isn't `hotburekas.vercel.app`, update `site` in `astro.config.mjs`, the sitemap line in `public/robots.txt`, and the callback URL below.
+- [ ] **GitHub App**: create the Keystatic GitHub App (run the dev server in GitHub mode once and follow the setup, or create it by hand). Callback URL: `https://hotburekas.vercel.app/api/keystatic/github/oauth/callback`. Install it on the `burekas-lohet` repo only.
 - [ ] **Environment variables** in Vercel Project Settings (never commit them): `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`, `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`. Redeploy after adding them.
 - [ ] **Test the admin on production**: open `/keystatic`, sign in with GitHub, edit one recipe, save. Check that a commit appears on GitHub, Vercel rebuilds, and the change is live.
 - [ ] **Branch workflow**: create a branch from the admin (it gets the `content/` prefix), confirm Vercel builds a preview, merge it with a pull request.

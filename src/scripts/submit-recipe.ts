@@ -58,9 +58,9 @@ if (form) {
   enableRemove(stepList, 'שלב');
   document.querySelector('#add-ingredient')!.addEventListener('click', () => addRow(ingredientList, '#ingredient-template', 'מצרך'));
   document.querySelector('#add-step')!.addEventListener('click', () => addRow(stepList, '#step-template', 'שלב'));
-  // Start with a few empty rows; empty rows are ignored on the server.
-  for (let i = 0; i < 3; i++) addRow(ingredientList, '#ingredient-template', 'מצרך');
-  for (let i = 0; i < 2; i++) addRow(stepList, '#step-template', 'שלב');
+  // Start with one row each; the visitor adds more with the buttons below the lists.
+  addRow(ingredientList, '#ingredient-template', 'מצרך');
+  addRow(stepList, '#step-template', 'שלב');
 
   /**
    * Shows a message in the status box and scrolls to it.

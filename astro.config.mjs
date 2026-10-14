@@ -10,7 +10,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://burekas-lohet.vercel.app',
+  site: 'https://hotburekas.vercel.app',
   // Public pages are pre-rendered; the Keystatic admin + API routes are server-rendered by the Vercel adapter.
   output: 'static',
   adapter: vercel(),

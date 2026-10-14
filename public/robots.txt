@@ -3,4 +3,4 @@ Allow: /
 Disallow: /keystatic
 Disallow: /api/
 
-Sitemap: https://burekas-lohet.vercel.app/sitemap-index.xml
+Sitemap: https://hotburekas.vercel.app/sitemap-index.xml

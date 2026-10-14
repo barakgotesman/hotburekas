@@ -23,9 +23,9 @@ In dev, Keystatic runs in `local` mode: edits are written straight to `src/conte
 3. **GitHub App for Keystatic**: run `npm run dev` with the four variables from `.env.example` empty and open `/keystatic` in GitHub mode (or temporarily set `storage.kind` to `github`); Keystatic walks you through creating the GitHub App and writes the values to `.env`. Alternatively create the app by hand.
 4. **Environment variables** (Vercel Project Settings, never commit them):
    `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`, `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`.
-5. **GitHub App callback URL**: `https://burekas-lohet.vercel.app/api/keystatic/github/oauth/callback`
+5. **GitHub App callback URL**: `https://hotburekas.vercel.app/api/keystatic/github/oauth/callback`
    (must match the production domain; the admin login does not work on preview deployments).
-6. Open `https://burekas-lohet.vercel.app/keystatic`, sign in with GitHub, and edit.
+6. Open `https://hotburekas.vercel.app/keystatic`, sign in with GitHub, and edit.
 
 ## Editing workflow (branches)
 
