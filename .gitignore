@@ -26,3 +26,13 @@ pnpm-debug.log*
 
 .env.*
 !.env.example
+
+# Windows-specific files
+Thumbs.db
+desktop.ini
+
+# local Claude Code settings (personal, not for the repo)
+.claude/settings.local.json
+
+# editor-local files
+*.log
