@@ -6,11 +6,11 @@ export const settings = singleton({
   path: 'src/content/settings',
   schema: {
     siteTitle: fields.text({ label: 'Site title', defaultValue: 'בורקס לוהט' }),
-    tagline: fields.text({ label: 'Tagline', description: 'Shown under the logo.', defaultValue: 'מתכוני בורקס ביתיים, צעד אחר צעד' }),
+    tagline: fields.text({ label: 'Tagline', description: 'Shown under the logo.', defaultValue: 'מתכוני בורקס ביתיים, שלב אחר שלב' }),
     heroTitle: fields.text({ label: 'Hero title (first line)', defaultValue: 'מתכוני בורקס ביתיים,' }),
-    heroHighlight: fields.text({ label: 'Hero title (highlighted second line)', description: 'Shown in the accent color.', defaultValue: 'צעד אחר צעד.' }),
+    heroHighlight: fields.text({ label: 'Hero title (highlighted second line)', description: 'Shown in the accent color.', defaultValue: 'שלב אחר שלב.' }),
     heroText: fields.text({ label: 'Hero text', multiline: true }),
-    heroStamp: fields.text({ label: 'Hero corner sticker', description: 'Small tilted label on the hero card. Leave empty to hide.', defaultValue: 'מתכון מומלץ' }),
+    heroStamp: fields.text({ label: 'Hero corner sticker', description: 'Small tilted label on the hero card. Leave empty to hide.', defaultValue: 'מתכון נבחר' }),
     heroImage: fields.image({
       label: 'Hero image',
       description: 'Landscape (4:3 works best), at least 1200px wide.',
@@ -25,6 +25,6 @@ export const settings = singleton({
       description: 'Pick a published recipe (not a draft). Falls back to the newest recipe if empty.',
       collection: 'recipes',
     }),
-    footerText: fields.text({ label: 'Footer text', defaultValue: 'מתכונים ביתיים שנכתבו באהבה' }),
+    footerText: fields.text({ label: 'Footer text', defaultValue: 'יש לכם מתכון לשתף?' }),
   },
 });

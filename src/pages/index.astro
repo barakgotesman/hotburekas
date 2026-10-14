@@ -21,7 +21,10 @@ const featured = recipes.find((r) => r.slug === settings.featuredRecipe) ?? reci
 const trending = recipes.slice(0, 4);
 ---
 
-<BaseLayout>
+<BaseLayout
+  title="מתכוני בורקס ביתיים"
+  description="מחפשים מתכוני בורקס ביתיים? באתר בורקס לוהט תמצאו כמויות מדויקות, זמני הכנה ואפייה והוראות ברורות שלב אחר שלב. בחרו מתכון והתחילו להכין בבית."
+>
   {/* 1. Ticker: full-bleed ink strip, the news scrolls past like a shop-window sign.
       The track holds two identical copies and animates by 50%, so the loop is seamless. */}
   {
@@ -110,7 +113,7 @@ const trending = recipes.slice(0, 4);
     {/* 3. Category chips: scroll sideways on mobile, wrap on desktop */}
     <section aria-labelledby="cats-heading">
       <div class="mb-4 flex items-end justify-between px-1">
-        <h2 id="cats-heading" class="text-3xl leading-none">מתכונים לפי קטגוריה</h2>
+        <h2 id="cats-heading" class="text-3xl leading-none">בורקס לפי סוג</h2>
         <span class="text-label-md text-on-surface-variant">בחרו קטגוריה</span>
       </div>
       <ul class="-mx-5 flex gap-3 overflow-x-auto px-5 pb-3 pt-1 [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:px-0">
@@ -195,11 +198,15 @@ const trending = recipes.slice(0, 4);
     <section class="relative -rotate-1 rounded-2xl border-2 border-ink bg-secondary p-6 text-center text-on-secondary shadow-card lg:p-10">
       <Icon name="material-symbols:bakery-dining-outline" class="mx-auto size-10 text-primary-container" aria-hidden="true" />
       <h2 class="mt-2 text-3xl leading-tight lg:text-5xl">{settings.footerText}</h2>
-      <p class="mx-auto mt-2 max-w-sm text-label-lg font-medium">רוצים לדעת מתי מתפרסם מתכון חדש? עקבו אחרי הפיד.</p>
+      <p class="mx-auto mt-2 max-w-sm text-label-lg font-medium">הישארו מעודכנים כשמתכון חדש מתפרסם באתר.</p>
       <Button href="/rss.xml" variant="crust" class="mt-5 w-full sm:w-auto">
         <Icon name="material-symbols:rss-feed" class="size-5" aria-hidden="true" />
-        עקבו אחרי המתכונים החדשים
+        עקבו אחרי המתכונים
       </Button>
+      <p class="mx-auto mt-4 max-w-sm text-label-lg font-medium">
+        יש לכם מתכון משלכם?
+        <a href="/submit/" class="underline underline-offset-2">שלחו אותו דרך הטופס באתר.</a>
+      </p>
     </section>
   </Container>
 </BaseLayout>
