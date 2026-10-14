@@ -31,6 +31,9 @@ export default config({
       // The Markdoc `steps` field becomes the body of each .mdoc/.md file.
       format: { contentField: 'steps' },
       entryLayout: 'content',
+      // Extra columns in the admin list view (/keystatic/collection/recipes). Only simple fields work
+      // (text, select, date, checkbox, integer, relationship). Click a column header to sort by it.
+      columns: ['category', 'kashrut', 'difficulty', 'publishedAt', 'draft'],
       schema: {
         title: fields.slug({
           name: { label: 'Title (Hebrew)', validation: { isRequired: true } },
