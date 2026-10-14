@@ -106,7 +106,11 @@ Design and build for phones first, then enhance for larger screens. Most visitor
 ## Project structure
 
 ```
-keystatic.config.ts        # Keystatic schema: single source of truth for content
+keystatic.config.ts        # Keystatic entry point: storage, admin UI (sidebar, logo), assembles the collections
+src/keystatic/             # Fields live here, one file per content type (the content model)
+  recipes.ts  categories.ts  authors.ts  settings.ts
+  shared.ts                # opts() and latinSlug helpers
+src/lib/labels.ts          # select options (English value + Hebrew label), imported by src/keystatic/*
 astro.config.mjs           # Astro + integrations + Vercel adapter
 src/
   content/                 # Content written by Keystatic (do not hand-edit casually)
@@ -144,7 +148,7 @@ public/
 - unit: values like `g`, `kg`, `ml`, `cup`, `tbsp`, `tsp`, `unit`, with Hebrew labels (גרם, ק"ג, מ"ל, כוס, כף, כפית, יחידה)
 - Always store the English value in content files and show the Hebrew label in the UI via a lookup map in `src/lib/labels.ts`.
 
-Rules for the schema:
+Rules for the schema (fields are defined in `src/keystatic/<collection>.ts`, not in `keystatic.config.ts`):
 - Use a custom slug setup (`fields.slug` with separate `name` and `slug` fields) so the Hebrew title and the Latin slug are both editable. Set `slugField` to the slug field's key.
 - Every collection has a `path` like `src/content/<collection>/*`.
 - Use `fields.relationship` for links between collections, never plain text.
