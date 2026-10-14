@@ -12,7 +12,9 @@ export const recipes = collection({
   slugField: 'title',
   // The Markdoc `steps` field becomes the body of each .mdoc file.
   format: { contentField: 'steps' },
-  entryLayout: 'content',
+  // 'form' = one column with every field in schema order (the steps editor is the last field).
+  // 'content' would split the screen into a large steps editor plus a side panel for the other fields.
+  entryLayout: 'form',
   // "Preview" button on each entry: opens the public page ({slug} is replaced with the entry slug).
   previewUrl: '/recipes/{slug}/',
   // Extra columns in the admin list view (/keystatic/collection/recipes). Only simple fields work
