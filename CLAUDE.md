@@ -149,6 +149,8 @@ Rules for the schema:
 - Use `fields.relationship` for links between collections, never plain text.
 - Mark required fields with `validation: { isRequired: true }`.
 - Images go in `src/assets/images/<collection>` (not `public/`) with `publicPath: '../../assets/images/<collection>/'`, so Astro `<Image>`/`<Picture>` can optimize them (AVIF/WebP, responsive sizes).
+  - **Keystatic stores a collection entry's images in a subfolder named after the entry slug**: `src/assets/images/recipes/<slug>/cover.jpg`, saved as `../../assets/images/recipes/<slug>/cover.jpg`. Singleton images have no slug folder (`src/assets/images/site/hero.jpg`). Resolve them with `resolveImage()` in `src/lib/images.ts`.
+- Keystatic's reader returns `fields.slug` values as the plain name string (e.g. `entry.title`, not `entry.title.name`); the slug is the entry key.
 - Changing the schema may break existing content files; check existing entries after any change.
 
 ## Keystatic storage mode

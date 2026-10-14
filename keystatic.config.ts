@@ -14,6 +14,8 @@ export default config({
     ? {
         kind: 'github',
         repo: { owner: 'YOUR_GITHUB_USER', name: 'burekas-lohet' },
+        // Editors work on `content/...` branches; Vercel builds a preview per branch and `main` stays protected.
+        branchPrefix: 'content/',
       }
     : { kind: 'local' },
 
